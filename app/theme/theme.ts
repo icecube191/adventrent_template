@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 export const COLORS = {
   primary: '#FF385C',
   secondary: '#00A699',
@@ -33,10 +35,26 @@ export const SIZES = {
 };
 
 export const FONTS = {
-  regular: 'Poppins-Regular',
-  medium: 'Poppins-Medium',
-  semiBold: 'Poppins-SemiBold',
-  bold: 'Poppins-Bold',
+  regular: Platform.select({
+    ios: 'System',
+    android: 'Roboto',
+    default: 'system-ui'
+  }),
+  medium: Platform.select({
+    ios: 'System',
+    android: 'Roboto',
+    default: 'system-ui'
+  }),
+  semiBold: Platform.select({
+    ios: 'System',
+    android: 'Roboto',
+    default: 'system-ui'
+  }),
+  bold: Platform.select({
+    ios: 'System',
+    android: 'Roboto',
+    default: 'system-ui'
+  }),
   sizes: {
     xs: 12,
     sm: 14,

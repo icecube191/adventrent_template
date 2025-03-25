@@ -1,16 +1,45 @@
 import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Link } from 'expo-router';
+import { Eye, EyeOff } from 'lucide-react-native';
 import { COLORS, FONTS, SIZES, SHADOWS } from '../theme/theme';
+import { useAuthStore } from '@/store/auth';
 
 export default function LoginScreen() {
+  const { login } = useAuthStore();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleLogin = () => {
-    // TODO: Implement login logic
-    setError('');
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleLogin = async () => {
+    try {
+      setError('');
+      
+      // Input validation
+      if (!email.trim() || !password.trim()) {
+        setError('Please fill in all fields');
+        return;
+      }
+
+      if (!validateEmail(email)) {
+        setError('Please enter a valid email address');
+        return;
+      }
+
+      setIsSubmitting(true);
+      await login({ email, password });
+    } catch (err: any) {
+      setError(err.message || 'Failed to login');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -34,19 +63,37 @@ export default function LoginScreen() {
             onChangeText={setEmail}
             autoCapitalize="none"
             keyboardType="email-address"
+            editable={!isSubmitting}
           />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor={COLORS.gray[400]}
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={styles.passwordInput}
+              placeholder="Password"
+              placeholderTextColor={COLORS.gray[400]}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+              editable={!isSubmitting}
+            />
+            <TouchableOpacity
+              style={styles.passwordToggle}
+              onPress={() => setShowPassword(!showPassword)}>
+              {showPassword ? (
+                <EyeOff size={20} color={COLORS.gray[400]} />
+              ) : (
+                <Eye size={20} color={COLORS.gray[400]} />
+              )}
+            </TouchableOpacity>
+          </View>
 
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Sign In</Text>
+          <TouchableOpacity
+            style={[styles.button, isSubmitting && styles.buttonDisabled]}
+            onPress={handleLogin}
+            disabled={isSubmitting}>
+            <Text style={styles.buttonText}>
+              {isSubmitting ? 'Signing in...' : 'Sign In'}
+            </Text>
           </TouchableOpacity>
 
           <View style={styles.footer}>
@@ -105,6 +152,25 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.regular,
     fontSize: FONTS.sizes.md,
   },
+  passwordContainer: {
+    position: 'relative',
+    marginBottom: SIZES.md,
+  },
+  passwordInput: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: COLORS.gray[200],
+    borderRadius: 8,
+    paddingHorizontal: SIZES.md,
+    paddingRight: SIZES.xl * 2,
+    fontFamily: FONTS.regular,
+    fontSize: FONTS.sizes.md,
+  },
+  passwordToggle: {
+    position: 'absolute',
+    right: SIZES.md,
+    top: 15,
+  },
   button: {
     backgroundColor: COLORS.primary,
     height: 50,
@@ -112,6 +178,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: SIZES.sm,
+  },
+  buttonDisabled: {
+    opacity: 0.7,
   },
   buttonText: {
     color: COLORS.white,
@@ -138,5 +207,8 @@ const styles = StyleSheet.create({
     color: COLORS.error,
     fontFamily: FONTS.regular,
     marginBottom: SIZES.md,
+    padding: SIZES.md,
+    backgroundColor: '#FFE5E5',
+    borderRadius: 8,
   },
 });

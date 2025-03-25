@@ -1,6 +1,6 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
-import { Star } from 'lucide-react-native';
+import { Star, ImageOff } from 'lucide-react-native';
 import { COLORS, FONTS, SIZES, SHADOWS } from '../app/theme/theme';
 
 interface VehicleCardProps {
@@ -10,17 +10,45 @@ interface VehicleCardProps {
   price: number;
   rating: number;
   reviews: number;
-  image: string;
+  primaryImage?: string;
+  images?: string[];
 }
 
-export default function VehicleCard({ id, title, type, price, rating, reviews, image }: VehicleCardProps) {
+const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1581393831734-5307269d1d00?q=80&w=1000';
+
+export default function VehicleCard({
+  id,
+  title,
+  type,
+  price,
+  rating,
+  reviews,
+  primaryImage,
+  images,
+}: VehicleCardProps) {
+  const imageUrl = primaryImage || images?.[0] || DEFAULT_IMAGE;
+
   return (
     <Link href={`/vehicle/${id}`} asChild>
       <TouchableOpacity style={styles.container}>
-        <Image source={{ uri: image }} style={styles.image} />
+        <View style={styles.imageContainer}>
+          {imageUrl ? (
+            <Image
+              source={{ uri: imageUrl }}
+              style={styles.image}
+              defaultSource={{ uri: DEFAULT_IMAGE }}
+            />
+          ) : (
+            <View style={styles.placeholderContainer}>
+              <ImageOff size={32} color={COLORS.gray[400]} />
+              <Text style={styles.placeholderText}>No image available</Text>
+            </View>
+          )}
+        </View>
+        
         <View style={styles.content}>
           <View style={styles.header}>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.title} numberOfLines={1}>{title}</Text>
             <View style={styles.rating}>
               <Star size={16} color={COLORS.warning} fill={COLORS.warning} />
               <Text style={styles.ratingText}>{rating}</Text>
@@ -43,9 +71,25 @@ const styles = StyleSheet.create({
     marginBottom: SIZES.md,
     ...SHADOWS.medium,
   },
-  image: {
+  imageContainer: {
     width: '100%',
     height: 200,
+    backgroundColor: COLORS.gray[100],
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  placeholderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  placeholderText: {
+    fontFamily: FONTS.regular,
+    fontSize: FONTS.sizes.sm,
+    color: COLORS.gray[600],
+    marginTop: SIZES.xs,
   },
   content: {
     padding: SIZES.md,
@@ -61,6 +105,7 @@ const styles = StyleSheet.create({
     fontSize: FONTS.sizes.lg,
     color: COLORS.black,
     flex: 1,
+    marginRight: SIZES.sm,
   },
   rating: {
     flexDirection: 'row',

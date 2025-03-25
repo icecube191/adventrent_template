@@ -1,30 +1,129 @@
-import { useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { useState, useCallback } from 'react';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  useWindowDimensions,
+  ActivityIndicator,
+} from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
-import { Star, Calendar, DollarSign } from 'lucide-react-native';
+import { Star, Calendar, DollarSign, ChevronLeft, ChevronRight, ImageOff } from 'lucide-react-native';
 import { COLORS, FONTS, SIZES, SHADOWS } from '../../theme/theme';
+import { useAuthStore } from '@/store/auth';
+import { vehiclesApi } from '@/utils/api';
+import type { Vehicle } from '@/types/api';
+
+const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1581393831734-5307269d1d00?q=80&w=1000';
 
 export default function VehicleDetailScreen() {
+  const { width } = useWindowDimensions();
   const { id } = useLocalSearchParams();
-  const [vehicle] = useState({
-    id,
-    title: 'Yamaha WaveRunner VX',
-    type: 'Jet Ski',
-    price: 299,
-    rating: 4.8,
-    reviews: 124,
-    image: 'https://images.unsplash.com/photo-1626447852999-c535d3a40db7?q=80&w=1000',
-    description: 'Experience the thrill of riding this powerful Yamaha WaveRunner VX. Perfect for both beginners and experienced riders.',
-    features: ['3 Seats', '110HP Engine', 'Fuel Efficient', 'Storage Compartment'],
-  });
+  const { user } = useAuthStore();
+  const [vehicle, setVehicle] = useState<Vehicle | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const handleBookNow = () => {
-    router.push(`/booking/${id}`);
+  const fetchVehicle = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await vehiclesApi.getVehicleById(id as string);
+      setVehicle(data);
+      // Set initial image to primary if available
+      if (data.primaryImage) {
+        const primaryIndex = data.images.findIndex(img => img === data.primaryImage);
+        if (primaryIndex !== -1) {
+          setCurrentImageIndex(primaryIndex);
+        }
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to load vehicle');
+    } finally {
+      setLoading(false);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    fetchVehicle();
+  }, [fetchVehicle]);
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex(prev => 
+      prev === 0 ? (vehicle?.images?.length || 1) - 1 : prev - 1
+    );
   };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex(prev =>
+      prev === (vehicle?.images?.length || 1) - 1 ? 0 : prev + 1
+    );
+  };
+
+  const handleEdit = () => {
+    router.push(`/vehicles/edit/${id}`);
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
+    );
+  }
+
+  if (error || !vehicle) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>{error || 'Vehicle not found'}</Text>
+        <TouchableOpacity style={styles.retryButton} onPress={fetchVehicle}>
+          <Text style={styles.retryButtonText}>Try Again</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  const currentImage = vehicle.images?.[currentImageIndex] || DEFAULT_IMAGE;
+  const isOwner = user?.id === vehicle.ownerId;
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <Image source={{ uri: vehicle.image }} style={styles.image} />
+      <View style={styles.imageContainer}>
+        {vehicle.images?.length ? (
+          <>
+            <Image source={{ uri: currentImage }} style={[styles.image, { width }]} />
+            {vehicle.images.length > 1 && (
+              <>
+                <TouchableOpacity style={[styles.imageButton, styles.prevButton]} onPress={handlePrevImage}>
+                  <ChevronLeft size={24} color={COLORS.white} />
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.imageButton, styles.nextButton]} onPress={handleNextImage}>
+                  <ChevronRight size={24} color={COLORS.white} />
+                </TouchableOpacity>
+                <View style={styles.pagination}>
+                  {vehicle.images.map((_, index) => (
+                    <View
+                      key={index}
+                      style={[
+                        styles.paginationDot,
+                        index === currentImageIndex && styles.paginationDotActive,
+                      ]}
+                    />
+                  ))}
+                </View>
+              </>
+            )}
+          </>
+        ) : (
+          <View style={[styles.placeholderContainer, { width }]}>
+            <ImageOff size={48} color={COLORS.gray[400]} />
+            <Text style={styles.placeholderText}>No images available</Text>
+          </View>
+        )}
+      </View>
       
       <View style={styles.content}>
         <View style={styles.header}>
@@ -57,10 +156,18 @@ export default function VehicleDetailScreen() {
             <Text style={styles.perDay}>/day</Text>
           </View>
           
-          <TouchableOpacity style={styles.bookButton} onPress={handleBookNow}>
-            <Calendar size={20} color={COLORS.white} style={styles.buttonIcon} />
-            <Text style={styles.bookButtonText}>Book Now</Text>
-          </TouchableOpacity>
+          {isOwner ? (
+            <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
+              <Text style={styles.editButtonText}>Edit Listing</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.bookButton}
+              onPress={() => router.push(`/booking/${id}`)}>
+              <Calendar size={20} color={COLORS.white} style={styles.buttonIcon} />
+              <Text style={styles.bookButtonText}>Book Now</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </ScrollView>
@@ -72,9 +179,85 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.white,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: COLORS.white,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: SIZES.xl,
+  },
+  errorText: {
+    fontFamily: FONTS.regular,
+    fontSize: FONTS.sizes.md,
+    color: COLORS.error,
+    textAlign: 'center',
+    marginBottom: SIZES.md,
+  },
+  retryButton: {
+    backgroundColor: COLORS.primary,
+    paddingVertical: SIZES.sm,
+    paddingHorizontal: SIZES.xl,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    fontFamily: FONTS.medium,
+    fontSize: FONTS.sizes.md,
+    color: COLORS.white,
+  },
+  imageContainer: {
+    position: 'relative',
+    backgroundColor: COLORS.gray[100],
+  },
   image: {
-    width: '100%',
     height: 300,
+  },
+  placeholderContainer: {
+    height: 300,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  placeholderText: {
+    fontFamily: FONTS.regular,
+    fontSize: FONTS.sizes.md,
+    color: COLORS.gray[600],
+    marginTop: SIZES.sm,
+  },
+  imageButton: {
+    position: 'absolute',
+    top: '50%',
+    transform: [{ translateY: -20 }],
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 20,
+    padding: SIZES.sm,
+  },
+  prevButton: {
+    left: SIZES.md,
+  },
+  nextButton: {
+    right: SIZES.md,
+  },
+  pagination: {
+    position: 'absolute',
+    bottom: SIZES.md,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: SIZES.xs,
+  },
+  paginationDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: 'rgba(255,255,255,0.5)',
+  },
+  paginationDotActive: {
+    backgroundColor: COLORS.white,
   },
   content: {
     padding: SIZES.xl,
@@ -178,6 +361,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: SIZES.xl,
     borderRadius: 12,
     ...SHADOWS.medium,
+  },
+  editButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.gray[100],
+    paddingVertical: SIZES.md,
+    paddingHorizontal: SIZES.xl,
+    borderRadius: 12,
+  },
+  editButtonText: {
+    fontFamily: FONTS.semiBold,
+    fontSize: FONTS.sizes.md,
+    color: COLORS.gray[700],
   },
   buttonIcon: {
     marginRight: SIZES.sm,

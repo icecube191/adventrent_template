@@ -2,29 +2,49 @@ import Constants from 'expo-constants';
 
 const ENV = {
   development: {
-    supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL!,
-    supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!,
+    apiUrl: process.env.EXPO_PUBLIC_API_URL!,
     stripePublishableKey: process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
-    logErrorsEnabled: true,
-    apiTimeout: 30000,
-    maxRetries: 3,
+    features: {
+      errorLogging: true,
+      analytics: false,
+      debugMode: true
+    },
+    api: {
+      timeout: 30000,
+      retries: 3
+    }
   },
   staging: {
-    supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL!,
-    supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!,
+    apiUrl: process.env.EXPO_PUBLIC_API_URL!,
     stripePublishableKey: process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
-    logErrorsEnabled: true,
-    apiTimeout: 30000,
-    maxRetries: 3,
+    features: {
+      errorLogging: true,
+      analytics: true,
+      debugMode: true
+    },
+    api: {
+      timeout: 30000,
+      retries: 3
+    }
   },
   production: {
-    supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL!,
-    supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!,
+    apiUrl: process.env.EXPO_PUBLIC_API_URL!,
     stripePublishableKey: process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
-    logErrorsEnabled: true,
-    apiTimeout: 15000,
-    maxRetries: 2,
-  },
+    features: {
+      errorLogging: true,
+      analytics: true,
+      debugMode: false
+    },
+    api: {
+      timeout: 15000,
+      retries: 2
+    }
+  }
 };
 
-export const config = ENV[Constants.expoConfig?.extra?.env || 'development'];
+const getEnvironment = () => {
+  const environment = Constants.expoConfig?.extra?.env || 'development';
+  return ENV[environment as keyof typeof ENV];
+};
+
+export const config = getEnvironment();
