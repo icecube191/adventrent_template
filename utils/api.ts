@@ -2,17 +2,15 @@ import axios, { AxiosError } from 'axios';
 import { router } from 'expo-router';
 import { config } from '@/config';
 import { storage } from './storage';
-import type { ApiError, AuthResponse, LoginCredentials, RegisterData, User, Vehicle, Booking } from '@/types/api';
+import type { ApiError, AuthResponse, LoginCredentials, RegisterData, User, Vehicle } from '@/types/api';
 
 /**
  * Base API configuration
- * For AWS Lambda + API Gateway deployment:
- * - Update config.apiUrl to point to your API Gateway endpoint
- * - Example: https://abc123def.execute-api.us-east-1.amazonaws.com/prod
+ * Using API Gateway URL for development environment
  */
 const api = axios.create({
   baseURL: config.apiUrl,
-  timeout: config.api.timeout,
+  timeout: config.api?.timeout || 10000, // Default to 10 seconds if not configured
   headers: {
     'Content-Type': 'application/json',
   },

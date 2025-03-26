@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, StyleSheet, LayoutChangeEvent } from 'react-native';
+import { View, StyleSheet, LayoutChangeEvent, Platform } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderWidth: 2,
     borderColor: COLORS.primary,
-    ...Platform.select({
+    ...(typeof Platform !== 'undefined' ? Platform.select({
       ios: {
         shadowColor: COLORS.black,
         shadowOffset: { width: 0, height: 2 },
@@ -108,6 +108,6 @@ const styles = StyleSheet.create({
       android: {
         elevation: 5,
       },
-    }),
+    }) : {}),
   },
 });

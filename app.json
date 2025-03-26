@@ -1,22 +1,52 @@
 {
   "expo": {
-    "name": "bolt-expo-nativewind",
-    "slug": "bolt-expo-nativewind",
+    "name": "Advenrent",
+    "slug": "advenrent",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "advenrent",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.advenrent.app",
+      "buildNumber": "1.0.0",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Advenrent needs access to your camera to take photos of vehicles and upload profile pictures.",
+        "NSPhotoLibraryUsageDescription": "Advenrent needs access to your photo library to upload vehicle images and profile pictures.",
+        "NSLocationWhenInUseUsageDescription": "Advenrent uses your location to show nearby vehicles and provide accurate search results.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Advenrent uses your location to show nearby vehicles and provide accurate search results.",
+        "UIBackgroundModes": ["location", "fetch"]
+      }
     },
-    "web": {
-      "bundler": "metro",
-      "output": "single",
-      "favicon": "./assets/images/favicon.png"
+    "android": {
+      "package": "com.advenrent.app",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ]
     },
-    "plugins": ["expo-router"],
+    "plugins": [
+      "expo-router",
+      "expo-location",
+      "expo-image-picker",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Advenrent needs access to your camera to take photos of vehicles and upload profile pictures."
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     }

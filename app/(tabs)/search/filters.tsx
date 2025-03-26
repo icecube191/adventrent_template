@@ -5,6 +5,7 @@ import { ArrowLeft, Check } from 'lucide-react-native';
 import { COLORS, FONTS, SIZES, SHADOWS } from '../../theme/theme';
 import RangeSlider from '@/components/RangeSlider';
 import DatePicker from '@/components/DatePicker';
+import { Platform } from 'react-native';
 
 const VEHICLE_TYPES = [
   { id: 'atv', label: 'ATV' },

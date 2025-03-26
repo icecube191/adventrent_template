@@ -9,7 +9,7 @@ declare global {
 
 export function useFrameworkReady() {
   useEffect(() => {
-    if (Platform.OS === 'web') {
+    if (typeof Platform !== 'undefined' && Platform.OS === 'web') {
       window.frameworkReady?.();
     }
   }, []);

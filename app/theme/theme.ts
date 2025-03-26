@@ -1,4 +1,6 @@
-import { Platform } from 'react-native';
+import { Platform, Dimensions, StatusBar } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
 
 export const COLORS = {
   primary: '#FF385C',
@@ -23,6 +25,7 @@ export const COLORS = {
 };
 
 export const SIZES = {
+  // Base sizes
   xs: 4,
   sm: 8,
   md: 16,
@@ -30,31 +33,51 @@ export const SIZES = {
   xl: 32,
   xxl: 40,
   xxxl: 48,
-  width: typeof window !== 'undefined' ? window.innerWidth : 0,
-  height: typeof window !== 'undefined' ? window.innerHeight : 0
+
+  // Device dimensions
+  width,
+  height,
+
+  // Platform-specific sizes
+  headerHeight: typeof Platform !== 'undefined' ? Platform.select({
+    ios: 44,
+    android: 56,
+    default: 64
+  }) : 64,
+  bottomTabHeight: typeof Platform !== 'undefined' ? Platform.select({
+    ios: 49,
+    android: 56,
+    default: 49
+  }) : 49,
+  statusBarHeight: typeof Platform !== 'undefined' && Platform.OS === 'android' ? StatusBar.currentHeight || 24 : 0,
+
+  // Responsive sizes
+  screenPadding: width < 375 ? 16 : 20,
+  cardWidth: (width - (width < 375 ? 48 : 60)) / 2,
+  maxContentWidth: 1200
 };
 
 export const FONTS = {
-  regular: Platform.select({
+  regular: typeof Platform !== 'undefined' ? Platform.select({
     ios: 'System',
     android: 'Roboto',
-    default: 'system-ui'
-  }),
-  medium: Platform.select({
+    default: 'System'
+  }) : 'System',
+  medium: typeof Platform !== 'undefined' ? Platform.select({
     ios: 'System',
-    android: 'Roboto',
-    default: 'system-ui'
-  }),
-  semiBold: Platform.select({
+    android: 'Roboto-Medium',
+    default: 'System'
+  }) : 'System',
+  semiBold: typeof Platform !== 'undefined' ? Platform.select({
     ios: 'System',
-    android: 'Roboto',
-    default: 'system-ui'
-  }),
-  bold: Platform.select({
+    android: 'Roboto-Bold',
+    default: 'System'
+  }) : 'System',
+  bold: typeof Platform !== 'undefined' ? Platform.select({
     ios: 'System',
-    android: 'Roboto',
-    default: 'system-ui'
-  }),
+    android: 'Roboto-Bold',
+    default: 'System'
+  }) : 'System',
   sizes: {
     xs: 12,
     sm: 14,
@@ -66,35 +89,63 @@ export const FONTS = {
   }
 };
 
-export const SHADOWS = {
-  small: {
-    shadowColor: COLORS.black,
-    shadowOffset: {
-      width: 0,
-      height: 2,
+export const SHADOWS = typeof Platform !== 'undefined' ? Platform.select({
+  ios: {
+    small: {
+      shadowColor: COLORS.black,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 2,
+    medium: {
+      shadowColor: COLORS.black,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.30,
+      shadowRadius: 4.65,
+    },
+    large: {
+      shadowColor: COLORS.black,
+      shadowOffset: { width: 0, height: 6 },
+      shadowOpacity: 0.37,
+      shadowRadius: 7.49,
+    }
   },
-  medium: {
-    shadowColor: COLORS.black,
-    shadowOffset: {
-      width: 0,
-      height: 4,
+  android: {
+    small: {
+      elevation: 2,
     },
-    shadowOpacity: 0.30,
-    shadowRadius: 4.65,
-    elevation: 4,
+    medium: {
+      elevation: 4,
+    },
+    large: {
+      elevation: 6,
+    }
   },
-  large: {
-    shadowColor: COLORS.black,
-    shadowOffset: {
-      width: 0,
-      height: 6,
+  default: {
+    small: {
+      shadowColor: COLORS.black,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 2,
     },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
-    elevation: 6,
+    medium: {
+      shadowColor: COLORS.black,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.30,
+      shadowRadius: 4.65,
+      elevation: 4,
+    },
+    large: {
+      shadowColor: COLORS.black,
+      shadowOffset: { width: 0, height: 6 },
+      shadowOpacity: 0.37,
+      shadowRadius: 7.49,
+      elevation: 6,
+    }
   }
+}) : {
+  small: {},
+  medium: {},
+  large: {}
 };

@@ -1,0 +1,27 @@
+Based on the current setup, here's how you can switch between development and production environments:
+
+For Development:
+
+NODE_ENV=development npm run dev
+For Production:
+
+NODE_ENV=production npm run dev
+The system is already configured to load the appropriate environment file based on NODE_ENV:
+
+.env for development (default)
+.env.staging for staging
+.env.production for production
+The configuration is handled in server/config/index.js which automatically loads the correct environment file:
+
+
+const envFile = process.env.NODE_ENV === 'production' 
+  ? '.env.production'
+  : process.env.NODE_ENV === 'staging'
+  ? '.env.staging'
+  : '.env';
+This means:
+
+Development uses database credentials from .env
+Production uses credentials from .env.production
+Staging uses credentials from .env.staging
+No changes to your code are needed - just set the NODE_ENV environment variable when starting the app to switch environments.
