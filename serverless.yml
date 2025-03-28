@@ -1,47 +1,18 @@
 service: advenrent-api
 
-provider:
-  name: aws
-  runtime: nodejs18.x
-  region: us-east-1
-  stage: dev
-  deploymentMethod: direct
-  environment:
-    DB_HOST: advenrent-instance-1.cabwqitbdsrq.us-east-1.rds.amazonaws.com
-    DB_PORT: 5432
-    DB_NAME: powersports
-    DB_USER: postgres
-    DB_PASSWORD: Rent2017$
-    JWT_SECRET: jwt_dev_secret
-    STRIPE_SECRET_KEY: sk_test_stripekey
-    STRIPE_WEBHOOK_SECRET: whsec_dev_webhook
-
-
-functions:
-  server:
-    handler: handler.server
-    package:
-      individually: true
-
-package:
-  patterns:
-    - 'server/**'
-    - 'config/**'
-    - 'handler.js'
-    - '.env*'
-    - '!**/__tests__/**'
-    - '!**/*.md'
-
-
 plugins:
-  - serverless-dotenv-plugin
   - serverless-offline
+  - ./serverless-dotenv.js
 
 custom:
+  serverless-offline:
+    httpPort: 5000
+    noPrependStageInUrl: true
   dotenv:
     path: .env.dev
+    logging: true
+    debug: true
     include:
-      - PORT
       - DB_HOST
       - DB_PORT
       - DB_NAME
@@ -51,4 +22,41 @@ custom:
       - STRIPE_SECRET_KEY
       - STRIPE_WEBHOOK_SECRET
       - CORS_ORIGIN
+    exclude:
       - NODE_ENV
+      - PORT
+      - TEST_ENV_CONFIRMATION
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+  environment:
+    DB_HOST: ${env:DB_HOST, 'advenrent-instance-1.cabwqitbdsrq.us-east-1.rds.amazonaws.com'}
+    DB_PORT: ${env:DB_PORT, '5432'}
+    DB_NAME: ${env:DB_NAME, 'powersports'}
+    DB_USER: ${env:DB_USER, 'postgres'}
+    DB_PASSWORD: ${env:DB_PASSWORD, 'Rent2017%24'}
+    JWT_SECRET: ${env:JWT_SECRET, 'jwt_dev_secret'}
+    STRIPE_SECRET_KEY: ${env:STRIPE_SECRET_KEY, 'sk_test_stripekey'}
+    STRIPE_WEBHOOK_SECRET: ${env:STRIPE_WEBHOOK_SECRET, 'whsec_dev_webhook'}
+    CORS_ORIGIN: ${env:CORS_ORIGIN, 'http://localhost:8081'}
+
+functions:
+  api:
+    handler: handler.handler
+    events:
+      - http:
+          path: /{proxy+}
+          method: any
+          cors: true
+
+package:
+  patterns:
+    - 'server/**'
+    - 'config/**'
+    - 'handler.js'
+    - '.env*'
+    - '!**/__tests__/**'
+    - '!**/*.md'

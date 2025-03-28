@@ -4,10 +4,17 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "EXPO_NO_TELEMETRY=1 NODE_ENV=development expo start",
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "dev": "expo start --dev-client",
+    "test": "jest",
+    "lint": "eslint .",
+    "server": "ts-node server/index.ts",
+    "server:dev": "nodemon --exec ts-node server/index.ts",
+    "serverless:dev": "npx serverless offline start --stage dev",
     "build:web": "expo export --platform web",
-    "lint": "expo lint",
-    "server": "nodemon server/index.js",
     "deploy": "serverless deploy"
   },
   "dependencies": {
@@ -59,10 +66,13 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@types/react": "~18.2.45",
     "babel-plugin-module-resolver": "^5.0.0",
+    "cross-env": "^7.0.3",
     "nodemon": "^3.1.0",
-    "serverless": "^3.38.0",
     "serverless-dotenv-plugin": "^6.0.0",
+    "ts-node": "^10.9.2",
+    "serverless": "^3.38.0",
     "serverless-offline": "^13.3.3",
     "typescript": "^5.3.3"
   },
