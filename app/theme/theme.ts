@@ -149,3 +149,12 @@ export const SHADOWS = typeof Platform !== 'undefined' ? Platform.select({
   medium: {},
   large: {}
 };
+
+const theme = {
+  COLORS,
+  SIZES,
+  FONTS,
+  SHADOWS
+};
+
+export default theme;
