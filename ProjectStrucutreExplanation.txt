@@ -1,0 +1,45 @@
+I'll provide a high-level explanation of the Advenrent project structure.
+
+📁 Project Overview:
+
+Frontend (Expo/React Native)
+
+/app - Main application routes using Expo Router
+/(tabs) - Tab-based navigation screens (Home, Search, Trips, Inbox, Profile)
+/(auth) - Authentication screens (Login, Signup)
+/components - Reusable UI components
+/utils - Helper functions and API clients
+/config - Environment configuration
+/types - TypeScript type definitions
+Backend (Express)
+
+/server
+/routes - API endpoints (auth, vehicles, payments)
+/config - Server configuration
+/middleware - Express middleware (auth, validation)
+/tests - Server-side tests
+Key Features:
+
+JWT-based authentication
+Stripe payment integration
+PostgreSQL database
+Error logging system
+Environment-specific configuration
+Testing:
+
+Unit tests for components
+API tests for backend routes
+E2E tests for critical flows
+Configuration:
+
+Environment variables managed through .env files
+Different configs for dev/staging/prod
+Secure credential management
+Main Flows:
+
+User authentication (login/signup)
+Vehicle browsing and search
+Booking and payment
+Profile management
+Role-based access (renter/rentee)
+The project follows a clean, modular architecture with proper separation of concerns and type safety throughout. It's built to be production-ready with comprehensive error handling, testing, and security measures in place.

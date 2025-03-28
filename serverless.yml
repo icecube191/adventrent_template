@@ -1,0 +1,54 @@
+service: advenrent-api
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  stage: dev
+  deploymentMethod: direct
+  environment:
+    DB_HOST: advenrent-instance-1.cabwqitbdsrq.us-east-1.rds.amazonaws.com
+    DB_PORT: 5432
+    DB_NAME: powersports
+    DB_USER: postgres
+    DB_PASSWORD: Rent2017$
+    JWT_SECRET: jwt_dev_secret
+    STRIPE_SECRET_KEY: sk_test_stripekey
+    STRIPE_WEBHOOK_SECRET: whsec_dev_webhook
+
+
+functions:
+  server:
+    handler: handler.server
+    package:
+      individually: true
+
+package:
+  patterns:
+    - 'server/**'
+    - 'config/**'
+    - 'handler.js'
+    - '.env*'
+    - '!**/__tests__/**'
+    - '!**/*.md'
+
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-offline
+
+custom:
+  dotenv:
+    path: .env.dev
+    include:
+      - PORT
+      - DB_HOST
+      - DB_PORT
+      - DB_NAME
+      - DB_USER
+      - DB_PASSWORD
+      - JWT_SECRET
+      - STRIPE_SECRET_KEY
+      - STRIPE_WEBHOOK_SECRET
+      - CORS_ORIGIN
+      - NODE_ENV

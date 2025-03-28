@@ -1,0 +1,57 @@
+{
+  "expo": {
+    "name": "Advenrent",
+    "slug": "advenrent",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "advenrent",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.advenrent.app",
+      "buildNumber": "1.0.0",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Advenrent needs access to your camera to take photos of vehicles and upload profile pictures.",
+        "NSPhotoLibraryUsageDescription": "Advenrent needs access to your photo library to upload vehicle images and profile pictures.",
+        "NSLocationWhenInUseUsageDescription": "Advenrent uses your location to show nearby vehicles and provide accurate search results.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Advenrent uses your location to show nearby vehicles and provide accurate search results.",
+        "UIBackgroundModes": ["location", "fetch"]
+      }
+    },
+    "android": {
+      "package": "com.advenrent.app",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-location",
+      "expo-image-picker",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Advenrent needs access to your camera to take photos of vehicles and upload profile pictures."
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "tsconfigPaths": true,
+      "newArchitecture": true
+    },
+    "newArchEnabled": true
+  }
+}
