@@ -9,17 +9,17 @@ const ENV = {
       name: process.env.DB_NAME || 'powersports',
       user: process.env.DB_USER || 'postgres',
       password: process.env.DB_PASSWORD,
-      ssl: false
+      ssl: false,
     },
     stripe: {
       publishableKey: process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY,
-      webhookSecret: process.env.STRIPE_WEBHOOK_SECRET
+      webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
     },
     features: {
       errorLogging: true,
       analytics: false,
-      debugMode: true
-    }
+      debugMode: true,
+    },
   },
   production: {
     apiUrl: 'https://api.advenrent.com',
@@ -30,19 +30,19 @@ const ENV = {
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       ssl: {
-        rejectUnauthorized: false
-      }
+        rejectUnauthorized: false,
+      },
     },
     stripe: {
       publishableKey: process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY,
-      webhookSecret: process.env.STRIPE_WEBHOOK_SECRET
+      webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
     },
     features: {
       errorLogging: true,
       analytics: true,
-      debugMode: false
-    }
-  }
+      debugMode: false,
+    },
+  },
 };
 
 const getEnvironment = () => {
@@ -53,5 +53,5 @@ const getEnvironment = () => {
 export const config = {
   ...getEnvironment(),
   isDevelopment: process.env.NODE_ENV === 'development',
-  isProduction: process.env.NODE_ENV === 'production'
+  isProduction: process.env.NODE_ENV === 'production',
 };

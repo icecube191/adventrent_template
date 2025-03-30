@@ -53,13 +53,13 @@ export default function VehicleDetailScreen() {
 
   const handlePrevImage = () => {
     setCurrentImageIndex(prev => 
-      prev === 0 ? (vehicle?.images?.length || 1) - 1 : prev - 1
+      prev === 0 ? (vehicle?.images?.length || 1) - 1 : prev - 1,
     );
   };
 
   const handleNextImage = () => {
     setCurrentImageIndex(prev =>
-      prev === (vehicle?.images?.length || 1) - 1 ? 0 : prev + 1
+      prev === (vehicle?.images?.length || 1) - 1 ? 0 : prev + 1,
     );
   };
 

@@ -1,0 +1,8 @@
+curl http://localhost:5000/dev/health
+
+serverless offline start --stage dev
+
+
+
+//Build serverelss deployment
+npx serverless package --stage dev

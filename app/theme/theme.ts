@@ -17,11 +17,11 @@ export const COLORS = {
     600: '#666666',
     700: '#444444',
     800: '#222222',
-    900: '#111111'
+    900: '#111111',
   },
   success: '#00A699',
   error: '#FF5A5F',
-  warning: '#FFB400'
+  warning: '#FFB400',
 };
 
 export const SIZES = {
@@ -42,41 +42,41 @@ export const SIZES = {
   headerHeight: typeof Platform !== 'undefined' ? Platform.select({
     ios: 44,
     android: 56,
-    default: 64
+    default: 64,
   }) : 64,
   bottomTabHeight: typeof Platform !== 'undefined' ? Platform.select({
     ios: 49,
     android: 56,
-    default: 49
+    default: 49,
   }) : 49,
   statusBarHeight: typeof Platform !== 'undefined' && Platform.OS === 'android' ? StatusBar.currentHeight || 24 : 0,
 
   // Responsive sizes
   screenPadding: width < 375 ? 16 : 20,
   cardWidth: (width - (width < 375 ? 48 : 60)) / 2,
-  maxContentWidth: 1200
+  maxContentWidth: 1200,
 };
 
 export const FONTS = {
   regular: typeof Platform !== 'undefined' ? Platform.select({
     ios: 'System',
     android: 'Roboto',
-    default: 'System'
+    default: 'System',
   }) : 'System',
   medium: typeof Platform !== 'undefined' ? Platform.select({
     ios: 'System',
     android: 'Roboto-Medium',
-    default: 'System'
+    default: 'System',
   }) : 'System',
   semiBold: typeof Platform !== 'undefined' ? Platform.select({
     ios: 'System',
     android: 'Roboto-Bold',
-    default: 'System'
+    default: 'System',
   }) : 'System',
   bold: typeof Platform !== 'undefined' ? Platform.select({
     ios: 'System',
     android: 'Roboto-Bold',
-    default: 'System'
+    default: 'System',
   }) : 'System',
   sizes: {
     xs: 12,
@@ -85,8 +85,8 @@ export const FONTS = {
     lg: 18,
     xl: 20,
     xxl: 24,
-    xxxl: 32
-  }
+    xxxl: 32,
+  },
 };
 
 export const SHADOWS = typeof Platform !== 'undefined' ? Platform.select({
@@ -108,7 +108,7 @@ export const SHADOWS = typeof Platform !== 'undefined' ? Platform.select({
       shadowOffset: { width: 0, height: 6 },
       shadowOpacity: 0.37,
       shadowRadius: 7.49,
-    }
+    },
   },
   android: {
     small: {
@@ -119,7 +119,7 @@ export const SHADOWS = typeof Platform !== 'undefined' ? Platform.select({
     },
     large: {
       elevation: 6,
-    }
+    },
   },
   default: {
     small: {
@@ -142,19 +142,19 @@ export const SHADOWS = typeof Platform !== 'undefined' ? Platform.select({
       shadowOpacity: 0.37,
       shadowRadius: 7.49,
       elevation: 6,
-    }
-  }
+    },
+  },
 }) : {
   small: {},
   medium: {},
-  large: {}
+  large: {},
 };
 
 const theme = {
   COLORS,
   SIZES,
   FONTS,
-  SHADOWS
+  SHADOWS,
 };
 
 export default theme;

@@ -162,9 +162,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/advenrent-api/dev/1743203086788-2025-03-28T23:04:46.788Z/api.zip"
+          "S3Key": "serverless/advenrent-api/dev/1743279673355-2025-03-29T20:21:13.355Z/api.zip"
         },
-        "Handler": "handler.handler",
+        "Handler": "handler.mjs",
         "Runtime": "nodejs18.x",
         "FunctionName": "advenrent-api-dev-api",
         "MemorySize": 1024,
@@ -179,10 +179,7 @@
             "JWT_SECRET": "jwt_dev_secret",
             "STRIPE_SECRET_KEY": "sk_test_stripekey",
             "STRIPE_WEBHOOK_SECRET": "whsec_dev_webhook",
-            "CORS_ORIGIN": "http://localhost:8081",
-            "PORT": "5000",
-            "NODE_ENV": "development",
-            "TEST_ENV_CONFIRMATION": "bolt_is_using_this_file"
+            "CORS_ORIGIN": "http://localhost:8081"
           }
         },
         "Role": {
@@ -196,14 +193,14 @@
         "ApiLogGroup"
       ]
     },
-    "ApiLambdaVersionijkIx0kLATw1KEK9b5xjyATQ0IpmHyXjFmxZqOeu8": {
+    "ApiLambdaVersion11y3GfLEXbhWyQP9ZIL3Wc2VEK7XoA0dNZv0NP4DVY": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ApiLambdaFunction"
         },
-        "CodeSha256": "Ei0uxY2Es3axW3pjPTrFmTbNAP/QiSBVk3QWviXmRdU="
+        "CodeSha256": "mGaqBOfw3w2nJkOoBWuvKOHZ5qLW1vAVbB3nxHZR9Do="
       }
     },
     "ApiGatewayRestApi": {
@@ -324,7 +321,7 @@
         "ApiLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1743203075903": {
+    "ApiGatewayDeployment1743279662022": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -387,7 +384,7 @@
     "ApiLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ApiLambdaVersionijkIx0kLATw1KEK9b5xjyATQ0IpmHyXjFmxZqOeu8"
+        "Ref": "ApiLambdaVersion11y3GfLEXbhWyQP9ZIL3Wc2VEK7XoA0dNZv0NP4DVY"
       },
       "Export": {
         "Name": "sls-advenrent-api-dev-ApiLambdaFunctionQualifiedArn"

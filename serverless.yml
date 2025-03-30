@@ -2,12 +2,12 @@ service: advenrent-api
 
 plugins:
   - serverless-offline
-  - ./serverless-dotenv.js
+  - serverless-dotenv-plugin
 
 custom:
   serverless-offline:
     httpPort: 5000
-    noPrependStageInUrl: true
+    lambdaPort: 3002
   dotenv:
     path: .env.dev
     logging: true
@@ -29,7 +29,7 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs22.x
   stage: ${opt:stage, 'dev'}
   region: us-east-1
   environment:
@@ -55,13 +55,16 @@ functions:
 package:
   individually: true
   patterns:
-    # Include essential files
+    # Include only .mjs backend files
+    - 'server/**/*.mjs'
+    - 'server/config/**/*.mjs'
+    - 'server/routes/**/*.mjs'
+    - 'server/db/**/*.mjs'
+    - 'server/middleware/**/*.mjs'
+    - 'handler.mjs'
+    
+    # Include only essential config files
     - 'package.json'
-    - 'package-lock.json'
-    - 'server/**'
-    - 'config/**'
-    - 'handler.js'
-    - 'serverless-dotenv.js'
     - '.env.dev'
     
     # Include only the necessary node_modules
@@ -73,8 +76,10 @@ package:
     - 'node_modules/bcryptjs/**'
     - 'node_modules/stripe/**'
     - 'node_modules/serverless-http/**'
+    - 'node_modules/serverless-dotenv-plugin/**'
+    - 'node_modules/serverless-offline/**'
     
-    # Exclude frontend files
+    # Exclude all frontend files
     - '!app/**'
     - '!assets/**'
     - '!components/**'
@@ -88,6 +93,9 @@ package:
     - '!metro.config.js'
     - '!README.md'
     - '!app.d.ts'
+    
+    # Exclude all .js files
+    - '!**/*.js'
     
     # Exclude unnecessary node_modules
     - '!**/node_modules/**/*.md'
@@ -178,7 +186,6 @@ package:
     - '!**/node_modules/**/*.cjs.css'
     - '!**/node_modules/**/*.cjs.js.map'
     - '!**/node_modules/**/*.cjs.css.map'
-    - '!**/node_modules/**/*.mjs'
     - '!**/node_modules/**/*.mjs.map'
     - '!**/node_modules/**/*.css'
     - '!**/node_modules/**/*.scss'
@@ -259,4 +266,3 @@ package:
     - '!**/node_modules/**/*.min'
     - '!**/node_modules/**/*.min.*'
     - '!**/node_modules/**/*.bundle'
-    - 'less-dotenv.js'

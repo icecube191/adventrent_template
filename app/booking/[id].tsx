@@ -5,7 +5,7 @@ import { Calendar, CreditCard, ArrowLeft } from 'lucide-react-native';
 import { loadStripe } from '@stripe/stripe-js';
 import { COLORS, FONTS, SIZES, SHADOWS } from '../theme/theme';
 
-const stripePromise = loadStripe(process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+const stripePromise = loadStripe(process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
 export default function BookingScreen() {
   const { id } = useLocalSearchParams();
@@ -46,7 +46,9 @@ export default function BookingScreen() {
 
       // Load Stripe
       const stripe = await stripePromise;
-      if (!stripe) throw new Error('Stripe failed to load');
+      if (!stripe) {
+        throw new Error('Stripe failed to load');
+      }
 
       // Confirm payment
       const { error: stripeError } = await stripe.confirmCardPayment(clientSecret, {
