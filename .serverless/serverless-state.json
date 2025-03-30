@@ -6,7 +6,7 @@
     },
     "provider": {
       "name": "aws",
-      "runtime": "nodejs18.x",
+      "runtime": "nodejs22.x",
       "stage": "dev",
       "region": "us-east-1",
       "environment": {
@@ -185,10 +185,10 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/advenrent-api/dev/1743279673355-2025-03-29T20:21:13.355Z/api.zip"
+                "S3Key": "serverless/advenrent-api/dev/1743364978726-2025-03-30T20:02:58.726Z/api.zip"
               },
-              "Handler": "handler.mjs",
-              "Runtime": "nodejs18.x",
+              "Handler": "handler.handler",
+              "Runtime": "nodejs22.x",
               "FunctionName": "advenrent-api-dev-api",
               "MemorySize": 1024,
               "Timeout": 6,
@@ -216,14 +216,14 @@
               "ApiLogGroup"
             ]
           },
-          "ApiLambdaVersion11y3GfLEXbhWyQP9ZIL3Wc2VEK7XoA0dNZv0NP4DVY": {
+          "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ApiLambdaFunction"
               },
-              "CodeSha256": "mGaqBOfw3w2nJkOoBWuvKOHZ5qLW1vAVbB3nxHZR9Do="
+              "CodeSha256": "qgts3ci233SpMiqaTHG+RrA0FobZ+s7/oERfpG+YkZE="
             }
           },
           "ApiGatewayRestApi": {
@@ -344,7 +344,7 @@
               "ApiLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1743279662022": {
+          "ApiGatewayDeployment1743364919978": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -407,7 +407,7 @@
           "ApiLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ApiLambdaVersion11y3GfLEXbhWyQP9ZIL3Wc2VEK7XoA0dNZv0NP4DVY"
+              "Ref": "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w"
             },
             "Export": {
               "Name": "sls-advenrent-api-dev-ApiLambdaFunctionQualifiedArn"
@@ -528,7 +528,7 @@
     "custom": {
       "serverless-offline": {
         "httpPort": 5000,
-        "noPrependStageInUrl": true
+        "lambdaPort": 3002
       },
       "dotenv": {
         "path": ".env.dev",
@@ -550,11 +550,6 @@
           "PORT",
           "TEST_ENV_CONFIRMATION"
         ]
-      },
-      "webpack": {
-        "webpackConfig": "webpack.config.js",
-        "packager": "npm",
-        "includeModules": true
       }
     },
     "plugins": [
@@ -564,7 +559,7 @@
     "pluginsData": {},
     "functions": {
       "api": {
-        "handler": "handler.mjs",
+        "handler": "handler.handler",
         "events": [
           {
             "http": {
@@ -593,17 +588,17 @@
         ],
         "name": "advenrent-api-dev-api",
         "package": {
-          "artifact": "D:\\T\\adventrent_template_bolt\\.serverless\\api.zip"
+          "artifact": ".serverless\\api.zip"
         },
         "memory": 1024,
         "timeout": 6,
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs22.x",
         "vpc": {},
-        "versionLogicalId": "ApiLambdaVersion11y3GfLEXbhWyQP9ZIL3Wc2VEK7XoA0dNZv0NP4DVY"
+        "versionLogicalId": "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w"
       }
     },
     "configValidationMode": "warn",
-    "serviceFilename": "serverless.yml",
+    "serviceFilename": "serverless",
     "initialServerlessConfig": {
       "service": "advenrent-api",
       "plugins": {
@@ -823,15 +818,16 @@
           "!**/node_modules/**/*.bundle"
         ],
         "artifactsS3KeyDirname": "serverless/advenrent-api/dev/code-artifacts",
-        "artifactDirectoryName": "serverless/advenrent-api/dev/1743279673355-2025-03-29T20:21:13.355Z"
+        "artifactDirectoryName": "serverless/advenrent-api/dev/1743364978726-2025-03-30T20:02:58.726Z"
       }
     },
-    "layers": {},
-    "isDashboardMonitoringPreconfigured": false
+    "appId": null,
+    "orgId": null,
+    "layers": {}
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/advenrent-api/dev/1743279673355-2025-03-29T20:21:13.355Z",
+    "artifactDirectoryName": "serverless/advenrent-api/dev/1743364978726-2025-03-30T20:02:58.726Z",
     "artifact": ""
   }
 }

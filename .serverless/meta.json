@@ -1,0 +1,1877 @@
+{
+  "D:\\T\\adventrent_template_bolt\\serverless.yml": {
+    "versionFramework": "4.9.1",
+    "servicePath": "D:\\T\\adventrent_template_bolt\\serverless.yml",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "advenrent-api",
+      "plugins": [
+        "serverless-offline",
+        "serverless-dotenv-plugin"
+      ],
+      "custom": {
+        "serverless-offline": {
+          "httpPort": 5000,
+          "lambdaPort": 3002
+        },
+        "dotenv": {
+          "path": ".env.dev",
+          "logging": true,
+          "debug": true,
+          "include": [
+            "DB_HOST",
+            "DB_PORT",
+            "DB_NAME",
+            "DB_USER",
+            "DB_PASSWORD",
+            "JWT_SECRET",
+            "STRIPE_SECRET_KEY",
+            "STRIPE_WEBHOOK_SECRET",
+            "CORS_ORIGIN"
+          ],
+          "exclude": [
+            "NODE_ENV",
+            "PORT",
+            "TEST_ENV_CONFIRMATION"
+          ]
+        }
+      },
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs22.x",
+        "stage": "dev",
+        "region": "us-east-1",
+        "environment": {
+          "DB_HOST": "advenrent-instance-1.cabwqitbdsrq.us-east-1.rds.amazonaws.com",
+          "DB_PORT": "5432",
+          "DB_NAME": "powersports",
+          "DB_USER": "postgres",
+          "DB_PASSWORD": "<REDACTED>",
+          "JWT_SECRET": "<REDACTED>",
+          "STRIPE_SECRET_KEY": "<REDACTED>",
+          "STRIPE_WEBHOOK_SECRET": "<REDACTED>",
+          "CORS_ORIGIN": "http://localhost:8081"
+        },
+        "versionFunctions": true,
+        "compiledCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "ServerlessDeploymentBucket": {
+              "Type": "AWS::S3::Bucket",
+              "Properties": {
+                "BucketEncryption": {
+                  "ServerSideEncryptionConfiguration": [
+                    {
+                      "ServerSideEncryptionByDefault": {
+                        "SSEAlgorithm": "AES256"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "ServerlessDeploymentBucketPolicy": {
+              "Type": "AWS::S3::BucketPolicy",
+              "Properties": {
+                "Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "PolicyDocument": {
+                  "Statement": [
+                    {
+                      "Action": "s3:*",
+                      "Effect": "Deny",
+                      "Principal": "*",
+                      "Resource": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              },
+                              "/*"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              }
+                            ]
+                          ]
+                        }
+                      ],
+                      "Condition": {
+                        "Bool": {
+                          "aws:SecureTransport": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "ApiLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/advenrent-api-dev-api"
+              }
+            },
+            "IamRoleLambdaExecution": {
+              "Type": "AWS::IAM::Role",
+              "Properties": {
+                "AssumeRolePolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Service": [
+                          "lambda.amazonaws.com"
+                        ]
+                      },
+                      "Action": [
+                        "sts:AssumeRole"
+                      ]
+                    }
+                  ]
+                },
+                "Policies": [
+                  {
+                    "PolicyName": {
+                      "Fn::Join": [
+                        "-",
+                        [
+                          "advenrent-api",
+                          "dev",
+                          "lambda"
+                        ]
+                      ]
+                    },
+                    "PolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:CreateLogStream",
+                            "logs:CreateLogGroup",
+                            "logs:TagResource"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/advenrent-api-dev*:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:PutLogEvents"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/advenrent-api-dev*:*:*"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "Path": "/",
+                "RoleName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "advenrent-api",
+                      "dev",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "lambdaRole"
+                    ]
+                  ]
+                }
+              }
+            },
+            "ApiLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": {
+                    "Ref": "ServerlessDeploymentBucket"
+                  },
+                  "S3Key": "serverless/advenrent-api/dev/1743364978726-2025-03-30T20:02:58.726Z/api.zip"
+                },
+                "Handler": "handler.handler",
+                "Runtime": "nodejs22.x",
+                "FunctionName": "advenrent-api-dev-api",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "DB_HOST": "advenrent-instance-1.cabwqitbdsrq.us-east-1.rds.amazonaws.com",
+                    "DB_PORT": "5432",
+                    "DB_NAME": "powersports",
+                    "DB_USER": "postgres",
+                    "DB_PASSWORD": "<REDACTED>",
+                    "JWT_SECRET": "<REDACTED>",
+                    "STRIPE_SECRET_KEY": "<REDACTED>",
+                    "STRIPE_WEBHOOK_SECRET": "<REDACTED>",
+                    "CORS_ORIGIN": "http://localhost:8081"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "ApiLogGroup"
+              ]
+            },
+            "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "ApiLambdaFunction"
+                },
+                "CodeSha256": "qgts3ci233SpMiqaTHG+RrA0FobZ+s7/oERfpG+YkZE="
+              }
+            },
+            "ApiGatewayRestApi": {
+              "Type": "AWS::ApiGateway::RestApi",
+              "Properties": {
+                "Name": "dev-advenrent-api",
+                "EndpointConfiguration": {
+                  "Types": [
+                    "EDGE"
+                  ]
+                },
+                "Policy": ""
+              }
+            },
+            "ApiGatewayResourceProxyVar": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "ParentId": {
+                  "Fn::GetAtt": [
+                    "ApiGatewayRestApi",
+                    "RootResourceId"
+                  ]
+                },
+                "PathPart": "{proxy+}",
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayMethodProxyVarOptions": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "AuthorizationType": "NONE",
+                "HttpMethod": "OPTIONS",
+                "MethodResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": true,
+                      "method.response.header.Access-Control-Allow-Headers": true,
+                      "method.response.header.Access-Control-Allow-Methods": true
+                    },
+                    "ResponseModels": {}
+                  }
+                ],
+                "RequestParameters": {},
+                "Integration": {
+                  "Type": "MOCK",
+                  "RequestTemplates": {
+                    "application/json": "{statusCode:200}"
+                  },
+                  "ContentHandling": "CONVERT_TO_TEXT",
+                  "IntegrationResponses": [
+                    {
+                      "StatusCode": "200",
+                      "ResponseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'"
+                      },
+                      "ResponseTemplates": {
+                        "application/json": ""
+                      }
+                    }
+                  ]
+                },
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceProxyVar"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayMethodProxyVarAny": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "ANY",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceProxyVar"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "ApiLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "ApiLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayDeployment1743364919978": {
+              "Type": "AWS::ApiGateway::Deployment",
+              "Properties": {
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "StageName": "dev"
+              },
+              "DependsOn": [
+                "ApiGatewayMethodProxyVarOptions",
+                "ApiGatewayMethodProxyVarAny"
+              ]
+            },
+            "ApiLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "ApiLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "Export": {
+                "Name": "sls-advenrent-api-dev-ServerlessDeploymentBucketName"
+              }
+            },
+            "ApiLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w"
+              },
+              "Export": {
+                "Name": "sls-advenrent-api-dev-ApiLambdaFunctionQualifiedArn"
+              }
+            },
+            "ServiceEndpoint": {
+              "Description": "URL of the service endpoint",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "https://",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    ".execute-api.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    },
+                    "/dev"
+                  ]
+                ]
+              },
+              "Export": {
+                "Name": "sls-advenrent-api-dev-ServiceEndpoint"
+              }
+            }
+          }
+        },
+        "coreCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "ServerlessDeploymentBucket": {
+              "Type": "AWS::S3::Bucket",
+              "Properties": {
+                "BucketEncryption": {
+                  "ServerSideEncryptionConfiguration": [
+                    {
+                      "ServerSideEncryptionByDefault": {
+                        "SSEAlgorithm": "AES256"
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "ServerlessDeploymentBucketPolicy": {
+              "Type": "AWS::S3::BucketPolicy",
+              "Properties": {
+                "Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "PolicyDocument": {
+                  "Statement": [
+                    {
+                      "Action": "s3:*",
+                      "Effect": "Deny",
+                      "Principal": "*",
+                      "Resource": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              },
+                              "/*"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":s3:::",
+                              {
+                                "Ref": "ServerlessDeploymentBucket"
+                              }
+                            ]
+                          ]
+                        }
+                      ],
+                      "Condition": {
+                        "Bool": {
+                          "aws:SecureTransport": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": {
+                "Ref": "ServerlessDeploymentBucket"
+              }
+            }
+          }
+        },
+        "vpc": {}
+      },
+      "functions": {
+        "api": {
+          "handler": "handler.handler",
+          "events": [
+            {
+              "http": {
+                "path": "{proxy+}",
+                "method": "any",
+                "cors": {
+                  "origin": "*",
+                  "methods": [
+                    "OPTIONS",
+                    "ANY"
+                  ],
+                  "headers": [
+                    "Content-Type",
+                    "X-Amz-Date",
+                    "Authorization",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent",
+                    "X-Amzn-Trace-Id"
+                  ],
+                  "allowCredentials": "<REDACTED>"
+                },
+                "integration": "AWS_PROXY"
+              }
+            }
+          ],
+          "name": "advenrent-api-dev-api",
+          "package": {
+            "artifact": ".serverless\\api.zip"
+          },
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs22.x",
+          "vpc": {},
+          "versionLogicalId": "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w"
+        }
+      },
+      "package": {
+        "individually": true,
+        "patterns": [
+          "server/**/*.mjs",
+          "server/config/**/*.mjs",
+          "server/routes/**/*.mjs",
+          "server/db/**/*.mjs",
+          "server/middleware/**/*.mjs",
+          "handler.mjs",
+          "package.json",
+          ".env.dev",
+          "node_modules/pg/**",
+          "node_modules/express/**",
+          "node_modules/cors/**",
+          "node_modules/dotenv/**",
+          "node_modules/jsonwebtoken/**",
+          "node_modules/bcryptjs/**",
+          "node_modules/stripe/**",
+          "node_modules/serverless-http/**",
+          "node_modules/serverless-dotenv-plugin/**",
+          "node_modules/serverless-offline/**",
+          "!app/**",
+          "!assets/**",
+          "!components/**",
+          "!constants/**",
+          "!hooks/**",
+          "!utils/**",
+          "!App.tsx",
+          "!app.json",
+          "!babel.config.js",
+          "!tsconfig.json",
+          "!metro.config.js",
+          "!README.md",
+          "!app.d.ts",
+          "!**/*.js",
+          "!**/node_modules/**/*.md",
+          "!**/node_modules/**/*.txt",
+          "!**/node_modules/**/*.d.ts",
+          "!**/node_modules/**/test/**",
+          "!**/node_modules/**/tests/**",
+          "!**/node_modules/**/__tests__/**",
+          "!**/node_modules/**/coverage/**",
+          "!**/node_modules/**/.git/**",
+          "!**/node_modules/**/.github/**",
+          "!**/node_modules/**/.vscode/**",
+          "!**/node_modules/**/.idea/**",
+          "!**/node_modules/**/docs/**",
+          "!**/node_modules/**/examples/**",
+          "!**/node_modules/**/benchmark/**",
+          "!**/node_modules/**/scripts/**",
+          "!**/node_modules/**/bin/**",
+          "!**/node_modules/**/dist/**",
+          "!**/node_modules/**/build/**",
+          "!**/node_modules/**/lib/**",
+          "!**/node_modules/**/src/**",
+          "!**/node_modules/**/types/**",
+          "!**/node_modules/**/typings/**",
+          "!**/node_modules/**/flow-typed/**",
+          "!**/node_modules/**/flow/**",
+          "!**/node_modules/**/ts/**",
+          "!**/node_modules/**/tsconfig.json",
+          "!**/node_modules/**/tsconfig.*.json",
+          "!**/node_modules/**/yarn.lock",
+          "!**/node_modules/**/pnpm-lock.yaml",
+          "!**/node_modules/**/CHANGELOG.md",
+          "!**/node_modules/**/LICENSE",
+          "!**/node_modules/**/LICENSE.md",
+          "!**/node_modules/**/README.md",
+          "!**/node_modules/**/README",
+          "!**/node_modules/**/AUTHORS",
+          "!**/node_modules/**/CONTRIBUTORS",
+          "!**/node_modules/**/HISTORY.md",
+          "!**/node_modules/**/NOTICE",
+          "!**/node_modules/**/SECURITY.md",
+          "!**/node_modules/**/SUPPORT.md",
+          "!**/node_modules/**/CODE_OF_CONDUCT.md",
+          "!**/node_modules/**/CONTRIBUTING.md",
+          "!**/node_modules/**/ISSUE_TEMPLATE/**",
+          "!**/node_modules/**/PULL_REQUEST_TEMPLATE.md",
+          "!**/node_modules/**/.editorconfig",
+          "!**/node_modules/**/.eslintrc*",
+          "!**/node_modules/**/.prettierrc*",
+          "!**/node_modules/**/.stylelintrc*",
+          "!**/node_modules/**/.babelrc*",
+          "!**/node_modules/**/.npmrc",
+          "!**/node_modules/**/.yarnrc",
+          "!**/node_modules/**/.gitignore",
+          "!**/node_modules/**/.gitattributes",
+          "!**/node_modules/**/.travis.yml",
+          "!**/node_modules/**/.circleci/**",
+          "!**/node_modules/**/.github/**",
+          "!**/node_modules/**/.vscode/**",
+          "!**/node_modules/**/.idea/**",
+          "!**/node_modules/**/.DS_Store",
+          "!**/node_modules/**/Thumbs.db",
+          "!**/node_modules/**/*.log",
+          "!**/node_modules/**/*.lock",
+          "!**/node_modules/**/*.map",
+          "!**/node_modules/**/*.ts",
+          "!**/node_modules/**/*.tsx",
+          "!**/node_modules/**/*.jsx",
+          "!**/node_modules/**/*.js.map",
+          "!**/node_modules/**/*.d.ts",
+          "!**/node_modules/**/*.min.js",
+          "!**/node_modules/**/*.min.css",
+          "!**/node_modules/**/*.min.js.map",
+          "!**/node_modules/**/*.min.css.map",
+          "!**/node_modules/**/*.bundle.js",
+          "!**/node_modules/**/*.bundle.css",
+          "!**/node_modules/**/*.bundle.js.map",
+          "!**/node_modules/**/*.bundle.css.map",
+          "!**/node_modules/**/*.umd.js",
+          "!**/node_modules/**/*.umd.css",
+          "!**/node_modules/**/*.umd.js.map",
+          "!**/node_modules/**/*.umd.css.map",
+          "!**/node_modules/**/*.esm.js",
+          "!**/node_modules/**/*.esm.css",
+          "!**/node_modules/**/*.esm.js.map",
+          "!**/node_modules/**/*.esm.css.map",
+          "!**/node_modules/**/*.cjs.js",
+          "!**/node_modules/**/*.cjs.css",
+          "!**/node_modules/**/*.cjs.js.map",
+          "!**/node_modules/**/*.cjs.css.map",
+          "!**/node_modules/**/*.mjs.map",
+          "!**/node_modules/**/*.css",
+          "!**/node_modules/**/*.scss",
+          "!**/node_modules/**/*.sass",
+          "!**/node_modules/**/*.less",
+          "!**/node_modules/**/*.styl",
+          "!**/node_modules/**/*.stylus",
+          "!**/node_modules/**/*.svg",
+          "!**/node_modules/**/*.png",
+          "!**/node_modules/**/*.jpg",
+          "!**/node_modules/**/*.jpeg",
+          "!**/node_modules/**/*.gif",
+          "!**/node_modules/**/*.ico",
+          "!**/node_modules/**/*.woff",
+          "!**/node_modules/**/*.woff2",
+          "!**/node_modules/**/*.ttf",
+          "!**/node_modules/**/*.eot",
+          "!**/node_modules/**/*.otf",
+          "!**/node_modules/**/*.mp4",
+          "!**/node_modules/**/*.webm",
+          "!**/node_modules/**/*.ogg",
+          "!**/node_modules/**/*.mp3",
+          "!**/node_modules/**/*.wav",
+          "!**/node_modules/**/*.flac",
+          "!**/node_modules/**/*.m4a",
+          "!**/node_modules/**/*.aac",
+          "!**/node_modules/**/*.wma",
+          "!**/node_modules/**/*.wmv",
+          "!**/node_modules/**/*.avi",
+          "!**/node_modules/**/*.mov",
+          "!**/node_modules/**/*.flv",
+          "!**/node_modules/**/*.mkv",
+          "!**/node_modules/**/*.webp",
+          "!**/node_modules/**/*.bmp",
+          "!**/node_modules/**/*.tiff",
+          "!**/node_modules/**/*.ico",
+          "!**/node_modules/**/*.cur",
+          "!**/node_modules/**/*.ani",
+          "!**/node_modules/**/*.pdf",
+          "!**/node_modules/**/*.doc",
+          "!**/node_modules/**/*.docx",
+          "!**/node_modules/**/*.xls",
+          "!**/node_modules/**/*.xlsx",
+          "!**/node_modules/**/*.ppt",
+          "!**/node_modules/**/*.pptx",
+          "!**/node_modules/**/*.odt",
+          "!**/node_modules/**/*.ods",
+          "!**/node_modules/**/*.odp",
+          "!**/node_modules/**/*.rtf",
+          "!**/node_modules/**/*.txt",
+          "!**/node_modules/**/*.csv",
+          "!**/node_modules/**/*.xml",
+          "!**/node_modules/**/*.yaml",
+          "!**/node_modules/**/*.yml",
+          "!**/node_modules/**/*.json",
+          "!**/node_modules/**/*.json5",
+          "!**/node_modules/**/*.toml",
+          "!**/node_modules/**/*.ini",
+          "!**/node_modules/**/*.conf",
+          "!**/node_modules/**/*.config",
+          "!**/node_modules/**/*.properties",
+          "!**/node_modules/**/*.env",
+          "!**/node_modules/**/*.env.*",
+          "!**/node_modules/**/*.local",
+          "!**/node_modules/**/*.local.*",
+          "!**/node_modules/**/*.development",
+          "!**/node_modules/**/*.development.*",
+          "!**/node_modules/**/*.test",
+          "!**/node_modules/**/*.test.*",
+          "!**/node_modules/**/*.staging",
+          "!**/node_modules/**/*.staging.*",
+          "!**/node_modules/**/*.production",
+          "!**/node_modules/**/*.production.*",
+          "!**/node_modules/**/*.debug",
+          "!**/node_modules/**/*.debug.*",
+          "!**/node_modules/**/*.release",
+          "!**/node_modules/**/*.release.*",
+          "!**/node_modules/**/*.min",
+          "!**/node_modules/**/*.min.*",
+          "!**/node_modules/**/*.bundle"
+        ],
+        "artifactsS3KeyDirname": "serverless/advenrent-api/dev/code-artifacts",
+        "artifactDirectoryName": "serverless/advenrent-api/dev/1743364978726-2025-03-30T20:02:58.726Z"
+      }
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs22.x",
+      "stage": "dev",
+      "region": "us-east-1",
+      "environment": {
+        "DB_HOST": "advenrent-instance-1.cabwqitbdsrq.us-east-1.rds.amazonaws.com",
+        "DB_PORT": "5432",
+        "DB_NAME": "powersports",
+        "DB_USER": "postgres",
+        "DB_PASSWORD": "<REDACTED>",
+        "JWT_SECRET": "<REDACTED>",
+        "STRIPE_SECRET_KEY": "<REDACTED>",
+        "STRIPE_WEBHOOK_SECRET": "<REDACTED>",
+        "CORS_ORIGIN": "http://localhost:8081"
+      },
+      "versionFunctions": true,
+      "compiledCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "ServerlessDeploymentBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketEncryption": {
+                "ServerSideEncryptionConfiguration": [
+                  {
+                    "ServerSideEncryptionByDefault": {
+                      "SSEAlgorithm": "AES256"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ApiLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/advenrent-api-dev-api"
+            }
+          },
+          "IamRoleLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "advenrent-api",
+                        "dev",
+                        "lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:CreateLogStream",
+                          "logs:CreateLogGroup",
+                          "logs:TagResource"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/advenrent-api-dev*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/advenrent-api-dev*:*:*"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "Path": "/",
+              "RoleName": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    "advenrent-api",
+                    "dev",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "lambdaRole"
+                  ]
+                ]
+              }
+            }
+          },
+          "ApiLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/advenrent-api/dev/1743364978726-2025-03-30T20:02:58.726Z/api.zip"
+              },
+              "Handler": "handler.handler",
+              "Runtime": "nodejs22.x",
+              "FunctionName": "advenrent-api-dev-api",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DB_HOST": "advenrent-instance-1.cabwqitbdsrq.us-east-1.rds.amazonaws.com",
+                  "DB_PORT": "5432",
+                  "DB_NAME": "powersports",
+                  "DB_USER": "postgres",
+                  "DB_PASSWORD": "<REDACTED>",
+                  "JWT_SECRET": "<REDACTED>",
+                  "STRIPE_SECRET_KEY": "<REDACTED>",
+                  "STRIPE_WEBHOOK_SECRET": "<REDACTED>",
+                  "CORS_ORIGIN": "http://localhost:8081"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "ApiLogGroup"
+            ]
+          },
+          "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "ApiLambdaFunction"
+              },
+              "CodeSha256": "qgts3ci233SpMiqaTHG+RrA0FobZ+s7/oERfpG+YkZE="
+            }
+          },
+          "ApiGatewayRestApi": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+              "Name": "dev-advenrent-api",
+              "EndpointConfiguration": {
+                "Types": [
+                  "EDGE"
+                ]
+              },
+              "Policy": ""
+            }
+          },
+          "ApiGatewayResourceProxyVar": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "{proxy+}",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodProxyVarOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceProxyVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodProxyVarAny": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "ANY",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceProxyVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": "<REDACTED>",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "ApiLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "ApiLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayDeployment1743364919978": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "StageName": "dev"
+            },
+            "DependsOn": [
+              "ApiGatewayMethodProxyVarOptions",
+              "ApiGatewayMethodProxyVarAny"
+            ]
+          },
+          "ApiLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "ApiLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": {
+              "Ref": "ServerlessDeploymentBucket"
+            },
+            "Export": {
+              "Name": "sls-advenrent-api-dev-ServerlessDeploymentBucketName"
+            }
+          },
+          "ApiLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w"
+            },
+            "Export": {
+              "Name": "sls-advenrent-api-dev-ApiLambdaFunctionQualifiedArn"
+            }
+          },
+          "ServiceEndpoint": {
+            "Description": "URL of the service endpoint",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/dev"
+                ]
+              ]
+            },
+            "Export": {
+              "Name": "sls-advenrent-api-dev-ServiceEndpoint"
+            }
+          }
+        }
+      },
+      "coreCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "ServerlessDeploymentBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketEncryption": {
+                "ServerSideEncryptionConfiguration": [
+                  {
+                    "ServerSideEncryptionByDefault": {
+                      "SSEAlgorithm": "AES256"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": {
+              "Ref": "ServerlessDeploymentBucket"
+            }
+          }
+        }
+      },
+      "vpc": {}
+    },
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "serviceRawFile": "service: advenrent-api\n\nplugins:\n  - serverless-offline\n  - serverless-dotenv-plugin\n\ncustom:\n  serverless-offline:\n    httpPort: 5000\n    lambdaPort: 3002\n  dotenv:\n    path: .env.dev\n    logging: true\n    debug: true\n    include:\n      - DB_HOST\n      - DB_PORT\n      - DB_NAME\n      - DB_USER\n      - DB_PASSWORD\n      - JWT_SECRET\n      - STRIPE_SECRET_KEY\n      - STRIPE_WEBHOOK_SECRET\n      - CORS_ORIGIN\n    exclude:\n      - NODE_ENV\n      - PORT\n      - TEST_ENV_CONFIRMATION\n\nprovider:\n  name: aws\n  runtime: nodejs22.x\n  stage: ${opt:stage, 'dev'}\n  region: us-east-1\n  environment:\n    DB_HOST: ${env:DB_HOST, 'advenrent-instance-1.cabwqitbdsrq.us-east-1.rds.amazonaws.com'}\n    DB_PORT: ${env:DB_PORT, '5432'}\n    DB_NAME: ${env:DB_NAME, 'powersports'}\n    DB_USER: ${env:DB_USER, 'postgres'}\n    DB_PASSWORD: ${env:DB_PASSWORD, 'Rent2017%24'}\n    JWT_SECRET: ${env:JWT_SECRET, 'jwt_dev_secret'}\n    STRIPE_SECRET_KEY: ${env:STRIPE_SECRET_KEY, 'sk_test_stripekey'}\n    STRIPE_WEBHOOK_SECRET: ${env:STRIPE_WEBHOOK_SECRET, 'whsec_dev_webhook'}\n    CORS_ORIGIN: ${env:CORS_ORIGIN, 'http://localhost:8081'}\n\nfunctions:\n  api:\n    handler: handler.handler\n    events:\n      - http:\n          path: /{proxy+}\n          method: any\n          cors: true\n\npackage:\n  individually: true\n  patterns:\n    # Include only .mjs backend files\n    - 'server/**/*.mjs'\n    - 'server/config/**/*.mjs'\n    - 'server/routes/**/*.mjs'\n    - 'server/db/**/*.mjs'\n    - 'server/middleware/**/*.mjs'\n    - 'handler.mjs'\n    \n    # Include only essential config files\n    - 'package.json'\n    - '.env.dev'\n    \n    # Include only the necessary node_modules\n    - 'node_modules/pg/**'\n    - 'node_modules/express/**'\n    - 'node_modules/cors/**'\n    - 'node_modules/dotenv/**'\n    - 'node_modules/jsonwebtoken/**'\n    - 'node_modules/bcryptjs/**'\n    - 'node_modules/stripe/**'\n    - 'node_modules/serverless-http/**'\n    - 'node_modules/serverless-dotenv-plugin/**'\n    - 'node_modules/serverless-offline/**'\n    \n    # Exclude all frontend files\n    - '!app/**'\n    - '!assets/**'\n    - '!components/**'\n    - '!constants/**'\n    - '!hooks/**'\n    - '!utils/**'\n    - '!App.tsx'\n    - '!app.json'\n    - '!babel.config.js'\n    - '!tsconfig.json'\n    - '!metro.config.js'\n    - '!README.md'\n    - '!app.d.ts'\n    \n    # Exclude all .js files\n    - '!**/*.js'\n    \n    # Exclude unnecessary node_modules\n    - '!**/node_modules/**/*.md'\n    - '!**/node_modules/**/*.txt'\n    - '!**/node_modules/**/*.d.ts'\n    - '!**/node_modules/**/test/**'\n    - '!**/node_modules/**/tests/**'\n    - '!**/node_modules/**/__tests__/**'\n    - '!**/node_modules/**/coverage/**'\n    - '!**/node_modules/**/.git/**'\n    - '!**/node_modules/**/.github/**'\n    - '!**/node_modules/**/.vscode/**'\n    - '!**/node_modules/**/.idea/**'\n    - '!**/node_modules/**/docs/**'\n    - '!**/node_modules/**/examples/**'\n    - '!**/node_modules/**/benchmark/**'\n    - '!**/node_modules/**/scripts/**'\n    - '!**/node_modules/**/bin/**'\n    - '!**/node_modules/**/dist/**'\n    - '!**/node_modules/**/build/**'\n    - '!**/node_modules/**/lib/**'\n    - '!**/node_modules/**/src/**'\n    - '!**/node_modules/**/types/**'\n    - '!**/node_modules/**/typings/**'\n    - '!**/node_modules/**/flow-typed/**'\n    - '!**/node_modules/**/flow/**'\n    - '!**/node_modules/**/ts/**'\n    - '!**/node_modules/**/tsconfig.json'\n    - '!**/node_modules/**/tsconfig.*.json'\n    - '!**/node_modules/**/yarn.lock'\n    - '!**/node_modules/**/pnpm-lock.yaml'\n    - '!**/node_modules/**/CHANGELOG.md'\n    - '!**/node_modules/**/LICENSE'\n    - '!**/node_modules/**/LICENSE.md'\n    - '!**/node_modules/**/README.md'\n    - '!**/node_modules/**/README'\n    - '!**/node_modules/**/AUTHORS'\n    - '!**/node_modules/**/CONTRIBUTORS'\n    - '!**/node_modules/**/HISTORY.md'\n    - '!**/node_modules/**/NOTICE'\n    - '!**/node_modules/**/SECURITY.md'\n    - '!**/node_modules/**/SUPPORT.md'\n    - '!**/node_modules/**/CODE_OF_CONDUCT.md'\n    - '!**/node_modules/**/CONTRIBUTING.md'\n    - '!**/node_modules/**/ISSUE_TEMPLATE/**'\n    - '!**/node_modules/**/PULL_REQUEST_TEMPLATE.md'\n    - '!**/node_modules/**/.editorconfig'\n    - '!**/node_modules/**/.eslintrc*'\n    - '!**/node_modules/**/.prettierrc*'\n    - '!**/node_modules/**/.stylelintrc*'\n    - '!**/node_modules/**/.babelrc*'\n    - '!**/node_modules/**/.npmrc'\n    - '!**/node_modules/**/.yarnrc'\n    - '!**/node_modules/**/.gitignore'\n    - '!**/node_modules/**/.gitattributes'\n    - '!**/node_modules/**/.travis.yml'\n    - '!**/node_modules/**/.circleci/**'\n    - '!**/node_modules/**/.github/**'\n    - '!**/node_modules/**/.vscode/**'\n    - '!**/node_modules/**/.idea/**'\n    - '!**/node_modules/**/.DS_Store'\n    - '!**/node_modules/**/Thumbs.db'\n    - '!**/node_modules/**/*.log'\n    - '!**/node_modules/**/*.lock'\n    - '!**/node_modules/**/*.map'\n    - '!**/node_modules/**/*.ts'\n    - '!**/node_modules/**/*.tsx'\n    - '!**/node_modules/**/*.jsx'\n    - '!**/node_modules/**/*.js.map'\n    - '!**/node_modules/**/*.d.ts'\n    - '!**/node_modules/**/*.min.js'\n    - '!**/node_modules/**/*.min.css'\n    - '!**/node_modules/**/*.min.js.map'\n    - '!**/node_modules/**/*.min.css.map'\n    - '!**/node_modules/**/*.bundle.js'\n    - '!**/node_modules/**/*.bundle.css'\n    - '!**/node_modules/**/*.bundle.js.map'\n    - '!**/node_modules/**/*.bundle.css.map'\n    - '!**/node_modules/**/*.umd.js'\n    - '!**/node_modules/**/*.umd.css'\n    - '!**/node_modules/**/*.umd.js.map'\n    - '!**/node_modules/**/*.umd.css.map'\n    - '!**/node_modules/**/*.esm.js'\n    - '!**/node_modules/**/*.esm.css'\n    - '!**/node_modules/**/*.esm.js.map'\n    - '!**/node_modules/**/*.esm.css.map'\n    - '!**/node_modules/**/*.cjs.js'\n    - '!**/node_modules/**/*.cjs.css'\n    - '!**/node_modules/**/*.cjs.js.map'\n    - '!**/node_modules/**/*.cjs.css.map'\n    - '!**/node_modules/**/*.mjs.map'\n    - '!**/node_modules/**/*.css'\n    - '!**/node_modules/**/*.scss'\n    - '!**/node_modules/**/*.sass'\n    - '!**/node_modules/**/*.less'\n    - '!**/node_modules/**/*.styl'\n    - '!**/node_modules/**/*.stylus'\n    - '!**/node_modules/**/*.svg'\n    - '!**/node_modules/**/*.png'\n    - '!**/node_modules/**/*.jpg'\n    - '!**/node_modules/**/*.jpeg'\n    - '!**/node_modules/**/*.gif'\n    - '!**/node_modules/**/*.ico'\n    - '!**/node_modules/**/*.woff'\n    - '!**/node_modules/**/*.woff2'\n    - '!**/node_modules/**/*.ttf'\n    - '!**/node_modules/**/*.eot'\n    - '!**/node_modules/**/*.otf'\n    - '!**/node_modules/**/*.mp4'\n    - '!**/node_modules/**/*.webm'\n    - '!**/node_modules/**/*.ogg'\n    - '!**/node_modules/**/*.mp3'\n    - '!**/node_modules/**/*.wav'\n    - '!**/node_modules/**/*.flac'\n    - '!**/node_modules/**/*.m4a'\n    - '!**/node_modules/**/*.aac'\n    - '!**/node_modules/**/*.wma'\n    - '!**/node_modules/**/*.wmv'\n    - '!**/node_modules/**/*.avi'\n    - '!**/node_modules/**/*.mov'\n    - '!**/node_modules/**/*.flv'\n    - '!**/node_modules/**/*.mkv'\n    - '!**/node_modules/**/*.webp'\n    - '!**/node_modules/**/*.bmp'\n    - '!**/node_modules/**/*.tiff'\n    - '!**/node_modules/**/*.ico'\n    - '!**/node_modules/**/*.cur'\n    - '!**/node_modules/**/*.ani'\n    - '!**/node_modules/**/*.pdf'\n    - '!**/node_modules/**/*.doc'\n    - '!**/node_modules/**/*.docx'\n    - '!**/node_modules/**/*.xls'\n    - '!**/node_modules/**/*.xlsx'\n    - '!**/node_modules/**/*.ppt'\n    - '!**/node_modules/**/*.pptx'\n    - '!**/node_modules/**/*.odt'\n    - '!**/node_modules/**/*.ods'\n    - '!**/node_modules/**/*.odp'\n    - '!**/node_modules/**/*.rtf'\n    - '!**/node_modules/**/*.txt'\n    - '!**/node_modules/**/*.csv'\n    - '!**/node_modules/**/*.xml'\n    - '!**/node_modules/**/*.yaml'\n    - '!**/node_modules/**/*.yml'\n    - '!**/node_modules/**/*.json'\n    - '!**/node_modules/**/*.json5'\n    - '!**/node_modules/**/*.toml'\n    - '!**/node_modules/**/*.ini'\n    - '!**/node_modules/**/*.conf'\n    - '!**/node_modules/**/*.config'\n    - '!**/node_modules/**/*.properties'\n    - '!**/node_modules/**/*.env'\n    - '!**/node_modules/**/*.env.*'\n    - '!**/node_modules/**/*.local'\n    - '!**/node_modules/**/*.local.*'\n    - '!**/node_modules/**/*.development'\n    - '!**/node_modules/**/*.development.*'\n    - '!**/node_modules/**/*.test'\n    - '!**/node_modules/**/*.test.*'\n    - '!**/node_modules/**/*.staging'\n    - '!**/node_modules/**/*.staging.*'\n    - '!**/node_modules/**/*.production'\n    - '!**/node_modules/**/*.production.*'\n    - '!**/node_modules/**/*.debug'\n    - '!**/node_modules/**/*.debug.*'\n    - '!**/node_modules/**/*.release'\n    - '!**/node_modules/**/*.release.*'\n    - '!**/node_modules/**/*.min'\n    - '!**/node_modules/**/*.min.*'\n    - '!**/node_modules/**/*.bundle'\n",
+    "command": [
+      "package"
+    ],
+    "options": {
+      "stage": "dev"
+    },
+    "orgId": "1f16c5b6-54ed-48af-85d4-570501484f45",
+    "orgName": "dmaloney2000",
+    "userId": "VnlN4J9CNWH04cXkSJ",
+    "userName": "dmaloney2000",
+    "serviceProviderAwsAccountId": "050111281203",
+    "serviceProviderAwsCfStackName": "advenrent-api-dev",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:050111281203:stack/advenrent-api-dev/7ee824b0-08d3-11f0-938d-125efeaafd0d",
+    "serviceProviderAwsCfStackCreated": "2025-03-24T17:14:51.002Z",
+    "serviceProviderAwsCfStackUpdated": "2025-03-25T14:21:42.284Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "AppLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:050111281203:function:advenrent-api-dev-app:14",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-advenrent-api-dev-AppLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "ServiceEndpoint",
+        "OutputValue": "https://bggf225g95.execute-api.us-east-1.amazonaws.com/dev",
+        "Description": "URL of the service endpoint",
+        "ExportName": "sls-advenrent-api-dev-ServiceEndpoint"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "advenrent-api-dev-serverlessdeploymentbucket-0bmqneyarlll",
+        "ExportName": "sls-advenrent-api-dev-ServerlessDeploymentBucketName"
+      }
+    ],
+    "compiledCloudFormationTemplate": {
+      "AWSTemplateFormatVersion": "2010-09-09",
+      "Description": "The AWS CloudFormation template for this Serverless application",
+      "Resources": {
+        "ServerlessDeploymentBucket": {
+          "Type": "AWS::S3::Bucket",
+          "Properties": {
+            "BucketEncryption": {
+              "ServerSideEncryptionConfiguration": [
+                {
+                  "ServerSideEncryptionByDefault": {
+                    "SSEAlgorithm": "AES256"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "ServerlessDeploymentBucketPolicy": {
+          "Type": "AWS::S3::BucketPolicy",
+          "Properties": {
+            "Bucket": {
+              "Ref": "ServerlessDeploymentBucket"
+            },
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "s3:*",
+                  "Effect": "Deny",
+                  "Principal": "*",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Ref": "ServerlessDeploymentBucket"
+                          },
+                          "/*"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Ref": "ServerlessDeploymentBucket"
+                          }
+                        ]
+                      ]
+                    }
+                  ],
+                  "Condition": {
+                    "Bool": {
+                      "aws:SecureTransport": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "ApiLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/advenrent-api-dev-api"
+          }
+        },
+        "IamRoleLambdaExecution": {
+          "Type": "AWS::IAM::Role",
+          "Properties": {
+            "AssumeRolePolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Principal": {
+                    "Service": [
+                      "lambda.amazonaws.com"
+                    ]
+                  },
+                  "Action": [
+                    "sts:AssumeRole"
+                  ]
+                }
+              ]
+            },
+            "Policies": [
+              {
+                "PolicyName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "advenrent-api",
+                      "dev",
+                      "lambda"
+                    ]
+                  ]
+                },
+                "PolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "logs:CreateLogStream",
+                        "logs:CreateLogGroup",
+                        "logs:TagResource"
+                      ],
+                      "Resource": [
+                        {
+                          "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/advenrent-api-dev*:*"
+                        }
+                      ]
+                    },
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "logs:PutLogEvents"
+                      ],
+                      "Resource": [
+                        {
+                          "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/advenrent-api-dev*:*:*"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ],
+            "Path": "/",
+            "RoleName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "advenrent-api",
+                  "dev",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  "lambdaRole"
+                ]
+              ]
+            }
+          }
+        },
+        "ApiLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "S3Key": "serverless/advenrent-api/dev/1743364978726-2025-03-30T20:02:58.726Z/api.zip"
+            },
+            "Handler": "handler.handler",
+            "Runtime": "nodejs22.x",
+            "FunctionName": "advenrent-api-dev-api",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Environment": {
+              "Variables": {
+                "DB_HOST": "advenrent-instance-1.cabwqitbdsrq.us-east-1.rds.amazonaws.com",
+                "DB_PORT": "5432",
+                "DB_NAME": "powersports",
+                "DB_USER": "postgres",
+                "DB_PASSWORD": "<REDACTED>",
+                "JWT_SECRET": "<REDACTED>",
+                "STRIPE_SECRET_KEY": "<REDACTED>",
+                "STRIPE_WEBHOOK_SECRET": "<REDACTED>",
+                "CORS_ORIGIN": "http://localhost:8081"
+              }
+            },
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            }
+          },
+          "DependsOn": [
+            "ApiLogGroup"
+          ]
+        },
+        "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "ApiLambdaFunction"
+            },
+            "CodeSha256": "qgts3ci233SpMiqaTHG+RrA0FobZ+s7/oERfpG+YkZE="
+          }
+        },
+        "ApiGatewayRestApi": {
+          "Type": "AWS::ApiGateway::RestApi",
+          "Properties": {
+            "Name": "dev-advenrent-api",
+            "EndpointConfiguration": {
+              "Types": [
+                "EDGE"
+              ]
+            },
+            "Policy": ""
+          }
+        },
+        "ApiGatewayResourceProxyVar": {
+          "Type": "AWS::ApiGateway::Resource",
+          "Properties": {
+            "ParentId": {
+              "Fn::GetAtt": [
+                "ApiGatewayRestApi",
+                "RootResourceId"
+              ]
+            },
+            "PathPart": "{proxy+}",
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayMethodProxyVarOptions": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "AuthorizationType": "NONE",
+            "HttpMethod": "OPTIONS",
+            "MethodResponses": [
+              {
+                "StatusCode": "200",
+                "ResponseParameters": {
+                  "method.response.header.Access-Control-Allow-Origin": true,
+                  "method.response.header.Access-Control-Allow-Headers": true,
+                  "method.response.header.Access-Control-Allow-Methods": true
+                },
+                "ResponseModels": {}
+              }
+            ],
+            "RequestParameters": {},
+            "Integration": {
+              "Type": "MOCK",
+              "RequestTemplates": {
+                "application/json": "{statusCode:200}"
+              },
+              "ContentHandling": "CONVERT_TO_TEXT",
+              "IntegrationResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": "'*'",
+                    "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                    "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'"
+                  },
+                  "ResponseTemplates": {
+                    "application/json": ""
+                  }
+                }
+              ]
+            },
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceProxyVar"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayMethodProxyVarAny": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "HttpMethod": "ANY",
+            "RequestParameters": {},
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceProxyVar"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "ApiKeyRequired": "<REDACTED>",
+            "AuthorizationType": "NONE",
+            "Integration": {
+              "IntegrationHttpMethod": "POST",
+              "Type": "AWS_PROXY",
+              "Uri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    {
+                      "Fn::GetAtt": [
+                        "ApiLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "/invocations"
+                  ]
+                ]
+              }
+            },
+            "MethodResponses": []
+          },
+          "DependsOn": [
+            "ApiLambdaPermissionApiGateway"
+          ]
+        },
+        "ApiGatewayDeployment1743364919978": {
+          "Type": "AWS::ApiGateway::Deployment",
+          "Properties": {
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "StageName": "dev"
+          },
+          "DependsOn": [
+            "ApiGatewayMethodProxyVarOptions",
+            "ApiGatewayMethodProxyVarAny"
+          ]
+        },
+        "ApiLambdaPermissionApiGateway": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "ApiLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "/*/*"
+                ]
+              ]
+            }
+          }
+        }
+      },
+      "Outputs": {
+        "ServerlessDeploymentBucketName": {
+          "Value": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "Export": {
+            "Name": "sls-advenrent-api-dev-ServerlessDeploymentBucketName"
+          }
+        },
+        "ApiLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w"
+          },
+          "Export": {
+            "Name": "sls-advenrent-api-dev-ApiLambdaFunctionQualifiedArn"
+          }
+        },
+        "ServiceEndpoint": {
+          "Description": "URL of the service endpoint",
+          "Value": {
+            "Fn::Join": [
+              "",
+              [
+                "https://",
+                {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                ".execute-api.",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ".",
+                {
+                  "Ref": "AWS::URLSuffix"
+                },
+                "/dev"
+              ]
+            ]
+          },
+          "Export": {
+            "Name": "sls-advenrent-api-dev-ServiceEndpoint"
+          }
+        }
+      }
+    },
+    "coreCloudFormationTemplate": {
+      "AWSTemplateFormatVersion": "2010-09-09",
+      "Description": "The AWS CloudFormation template for this Serverless application",
+      "Resources": {
+        "ServerlessDeploymentBucket": {
+          "Type": "AWS::S3::Bucket",
+          "Properties": {
+            "BucketEncryption": {
+              "ServerSideEncryptionConfiguration": [
+                {
+                  "ServerSideEncryptionByDefault": {
+                    "SSEAlgorithm": "AES256"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "ServerlessDeploymentBucketPolicy": {
+          "Type": "AWS::S3::BucketPolicy",
+          "Properties": {
+            "Bucket": {
+              "Ref": "ServerlessDeploymentBucket"
+            },
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "s3:*",
+                  "Effect": "Deny",
+                  "Principal": "*",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Ref": "ServerlessDeploymentBucket"
+                          },
+                          "/*"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Ref": "ServerlessDeploymentBucket"
+                          }
+                        ]
+                      ]
+                    }
+                  ],
+                  "Condition": {
+                    "Bool": {
+                      "aws:SecureTransport": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Outputs": {
+        "ServerlessDeploymentBucketName": {
+          "Value": {
+            "Ref": "ServerlessDeploymentBucket"
+          }
+        }
+      }
+    }
+  }
+}

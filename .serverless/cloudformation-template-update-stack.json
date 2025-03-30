@@ -162,10 +162,10 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/advenrent-api/dev/1743279673355-2025-03-29T20:21:13.355Z/api.zip"
+          "S3Key": "serverless/advenrent-api/dev/1743364978726-2025-03-30T20:02:58.726Z/api.zip"
         },
-        "Handler": "handler.mjs",
-        "Runtime": "nodejs18.x",
+        "Handler": "handler.handler",
+        "Runtime": "nodejs22.x",
         "FunctionName": "advenrent-api-dev-api",
         "MemorySize": 1024,
         "Timeout": 6,
@@ -193,14 +193,14 @@
         "ApiLogGroup"
       ]
     },
-    "ApiLambdaVersion11y3GfLEXbhWyQP9ZIL3Wc2VEK7XoA0dNZv0NP4DVY": {
+    "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ApiLambdaFunction"
         },
-        "CodeSha256": "mGaqBOfw3w2nJkOoBWuvKOHZ5qLW1vAVbB3nxHZR9Do="
+        "CodeSha256": "qgts3ci233SpMiqaTHG+RrA0FobZ+s7/oERfpG+YkZE="
       }
     },
     "ApiGatewayRestApi": {
@@ -321,7 +321,7 @@
         "ApiLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1743279662022": {
+    "ApiGatewayDeployment1743364919978": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -384,7 +384,7 @@
     "ApiLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ApiLambdaVersion11y3GfLEXbhWyQP9ZIL3Wc2VEK7XoA0dNZv0NP4DVY"
+        "Ref": "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w"
       },
       "Export": {
         "Name": "sls-advenrent-api-dev-ApiLambdaFunctionQualifiedArn"
