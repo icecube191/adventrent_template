@@ -217,7 +217,7 @@
                   "S3Bucket": {
                     "Ref": "ServerlessDeploymentBucket"
                   },
-                  "S3Key": "serverless/advenrent-api/dev/1743364978726-2025-03-30T20:02:58.726Z/api.zip"
+                  "S3Key": "serverless/advenrent-api/dev/1743366107478-2025-03-30T20:21:47.478Z/api.zip"
                 },
                 "Handler": "handler.handler",
                 "Runtime": "nodejs22.x",
@@ -248,14 +248,14 @@
                 "ApiLogGroup"
               ]
             },
-            "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w": {
+            "ApiLambdaVersionalySEMz370pps2Qcd1SjpK2pQD4udYbKN2qprqVfw": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "ApiLambdaFunction"
                 },
-                "CodeSha256": "qgts3ci233SpMiqaTHG+RrA0FobZ+s7/oERfpG+YkZE="
+                "CodeSha256": "/SQTTi4RhRjsgeGjCLJy7FndECEmXfaj+RVK7H8lJyM="
               }
             },
             "ApiGatewayRestApi": {
@@ -376,7 +376,7 @@
                 "ApiLambdaPermissionApiGateway"
               ]
             },
-            "ApiGatewayDeployment1743364919978": {
+            "ApiGatewayDeployment1743366071812": {
               "Type": "AWS::ApiGateway::Deployment",
               "Properties": {
                 "RestApiId": {
@@ -439,7 +439,7 @@
             "ApiLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w"
+                "Ref": "ApiLambdaVersionalySEMz370pps2Qcd1SjpK2pQD4udYbKN2qprqVfw"
               },
               "Export": {
                 "Name": "sls-advenrent-api-dev-ApiLambdaFunctionQualifiedArn"
@@ -594,7 +594,7 @@
           "timeout": 6,
           "runtime": "nodejs22.x",
           "vpc": {},
-          "versionLogicalId": "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w"
+          "versionLogicalId": "ApiLambdaVersionalySEMz370pps2Qcd1SjpK2pQD4udYbKN2qprqVfw"
         }
       },
       "package": {
@@ -631,8 +631,6 @@
           "!metro.config.js",
           "!README.md",
           "!app.d.ts",
-          "!**/*.js",
-          "!**/node_modules/**/*.md",
           "!**/node_modules/**/*.txt",
           "!**/node_modules/**/*.d.ts",
           "!**/node_modules/**/test/**",
@@ -802,7 +800,7 @@
           "!**/node_modules/**/*.bundle"
         ],
         "artifactsS3KeyDirname": "serverless/advenrent-api/dev/code-artifacts",
-        "artifactDirectoryName": "serverless/advenrent-api/dev/1743364978726-2025-03-30T20:02:58.726Z"
+        "artifactDirectoryName": "serverless/advenrent-api/dev/1743366107478-2025-03-30T20:21:47.478Z"
       }
     },
     "provider": {
@@ -986,7 +984,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/advenrent-api/dev/1743364978726-2025-03-30T20:02:58.726Z/api.zip"
+                "S3Key": "serverless/advenrent-api/dev/1743366107478-2025-03-30T20:21:47.478Z/api.zip"
               },
               "Handler": "handler.handler",
               "Runtime": "nodejs22.x",
@@ -1017,14 +1015,14 @@
               "ApiLogGroup"
             ]
           },
-          "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w": {
+          "ApiLambdaVersionalySEMz370pps2Qcd1SjpK2pQD4udYbKN2qprqVfw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ApiLambdaFunction"
               },
-              "CodeSha256": "qgts3ci233SpMiqaTHG+RrA0FobZ+s7/oERfpG+YkZE="
+              "CodeSha256": "/SQTTi4RhRjsgeGjCLJy7FndECEmXfaj+RVK7H8lJyM="
             }
           },
           "ApiGatewayRestApi": {
@@ -1145,7 +1143,7 @@
               "ApiLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1743364919978": {
+          "ApiGatewayDeployment1743366071812": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -1208,7 +1206,7 @@
           "ApiLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w"
+              "Ref": "ApiLambdaVersionalySEMz370pps2Qcd1SjpK2pQD4udYbKN2qprqVfw"
             },
             "Export": {
               "Name": "sls-advenrent-api-dev-ApiLambdaFunctionQualifiedArn"
@@ -1335,7 +1333,7 @@
       "serviceProvider": null,
       "instanceParameters": null
     },
-    "serviceRawFile": "service: advenrent-api\n\nplugins:\n  - serverless-offline\n  - serverless-dotenv-plugin\n\ncustom:\n  serverless-offline:\n    httpPort: 5000\n    lambdaPort: 3002\n  dotenv:\n    path: .env.dev\n    logging: true\n    debug: true\n    include:\n      - DB_HOST\n      - DB_PORT\n      - DB_NAME\n      - DB_USER\n      - DB_PASSWORD\n      - JWT_SECRET\n      - STRIPE_SECRET_KEY\n      - STRIPE_WEBHOOK_SECRET\n      - CORS_ORIGIN\n    exclude:\n      - NODE_ENV\n      - PORT\n      - TEST_ENV_CONFIRMATION\n\nprovider:\n  name: aws\n  runtime: nodejs22.x\n  stage: ${opt:stage, 'dev'}\n  region: us-east-1\n  environment:\n    DB_HOST: ${env:DB_HOST, 'advenrent-instance-1.cabwqitbdsrq.us-east-1.rds.amazonaws.com'}\n    DB_PORT: ${env:DB_PORT, '5432'}\n    DB_NAME: ${env:DB_NAME, 'powersports'}\n    DB_USER: ${env:DB_USER, 'postgres'}\n    DB_PASSWORD: ${env:DB_PASSWORD, 'Rent2017%24'}\n    JWT_SECRET: ${env:JWT_SECRET, 'jwt_dev_secret'}\n    STRIPE_SECRET_KEY: ${env:STRIPE_SECRET_KEY, 'sk_test_stripekey'}\n    STRIPE_WEBHOOK_SECRET: ${env:STRIPE_WEBHOOK_SECRET, 'whsec_dev_webhook'}\n    CORS_ORIGIN: ${env:CORS_ORIGIN, 'http://localhost:8081'}\n\nfunctions:\n  api:\n    handler: handler.handler\n    events:\n      - http:\n          path: /{proxy+}\n          method: any\n          cors: true\n\npackage:\n  individually: true\n  patterns:\n    # Include only .mjs backend files\n    - 'server/**/*.mjs'\n    - 'server/config/**/*.mjs'\n    - 'server/routes/**/*.mjs'\n    - 'server/db/**/*.mjs'\n    - 'server/middleware/**/*.mjs'\n    - 'handler.mjs'\n    \n    # Include only essential config files\n    - 'package.json'\n    - '.env.dev'\n    \n    # Include only the necessary node_modules\n    - 'node_modules/pg/**'\n    - 'node_modules/express/**'\n    - 'node_modules/cors/**'\n    - 'node_modules/dotenv/**'\n    - 'node_modules/jsonwebtoken/**'\n    - 'node_modules/bcryptjs/**'\n    - 'node_modules/stripe/**'\n    - 'node_modules/serverless-http/**'\n    - 'node_modules/serverless-dotenv-plugin/**'\n    - 'node_modules/serverless-offline/**'\n    \n    # Exclude all frontend files\n    - '!app/**'\n    - '!assets/**'\n    - '!components/**'\n    - '!constants/**'\n    - '!hooks/**'\n    - '!utils/**'\n    - '!App.tsx'\n    - '!app.json'\n    - '!babel.config.js'\n    - '!tsconfig.json'\n    - '!metro.config.js'\n    - '!README.md'\n    - '!app.d.ts'\n    \n    # Exclude all .js files\n    - '!**/*.js'\n    \n    # Exclude unnecessary node_modules\n    - '!**/node_modules/**/*.md'\n    - '!**/node_modules/**/*.txt'\n    - '!**/node_modules/**/*.d.ts'\n    - '!**/node_modules/**/test/**'\n    - '!**/node_modules/**/tests/**'\n    - '!**/node_modules/**/__tests__/**'\n    - '!**/node_modules/**/coverage/**'\n    - '!**/node_modules/**/.git/**'\n    - '!**/node_modules/**/.github/**'\n    - '!**/node_modules/**/.vscode/**'\n    - '!**/node_modules/**/.idea/**'\n    - '!**/node_modules/**/docs/**'\n    - '!**/node_modules/**/examples/**'\n    - '!**/node_modules/**/benchmark/**'\n    - '!**/node_modules/**/scripts/**'\n    - '!**/node_modules/**/bin/**'\n    - '!**/node_modules/**/dist/**'\n    - '!**/node_modules/**/build/**'\n    - '!**/node_modules/**/lib/**'\n    - '!**/node_modules/**/src/**'\n    - '!**/node_modules/**/types/**'\n    - '!**/node_modules/**/typings/**'\n    - '!**/node_modules/**/flow-typed/**'\n    - '!**/node_modules/**/flow/**'\n    - '!**/node_modules/**/ts/**'\n    - '!**/node_modules/**/tsconfig.json'\n    - '!**/node_modules/**/tsconfig.*.json'\n    - '!**/node_modules/**/yarn.lock'\n    - '!**/node_modules/**/pnpm-lock.yaml'\n    - '!**/node_modules/**/CHANGELOG.md'\n    - '!**/node_modules/**/LICENSE'\n    - '!**/node_modules/**/LICENSE.md'\n    - '!**/node_modules/**/README.md'\n    - '!**/node_modules/**/README'\n    - '!**/node_modules/**/AUTHORS'\n    - '!**/node_modules/**/CONTRIBUTORS'\n    - '!**/node_modules/**/HISTORY.md'\n    - '!**/node_modules/**/NOTICE'\n    - '!**/node_modules/**/SECURITY.md'\n    - '!**/node_modules/**/SUPPORT.md'\n    - '!**/node_modules/**/CODE_OF_CONDUCT.md'\n    - '!**/node_modules/**/CONTRIBUTING.md'\n    - '!**/node_modules/**/ISSUE_TEMPLATE/**'\n    - '!**/node_modules/**/PULL_REQUEST_TEMPLATE.md'\n    - '!**/node_modules/**/.editorconfig'\n    - '!**/node_modules/**/.eslintrc*'\n    - '!**/node_modules/**/.prettierrc*'\n    - '!**/node_modules/**/.stylelintrc*'\n    - '!**/node_modules/**/.babelrc*'\n    - '!**/node_modules/**/.npmrc'\n    - '!**/node_modules/**/.yarnrc'\n    - '!**/node_modules/**/.gitignore'\n    - '!**/node_modules/**/.gitattributes'\n    - '!**/node_modules/**/.travis.yml'\n    - '!**/node_modules/**/.circleci/**'\n    - '!**/node_modules/**/.github/**'\n    - '!**/node_modules/**/.vscode/**'\n    - '!**/node_modules/**/.idea/**'\n    - '!**/node_modules/**/.DS_Store'\n    - '!**/node_modules/**/Thumbs.db'\n    - '!**/node_modules/**/*.log'\n    - '!**/node_modules/**/*.lock'\n    - '!**/node_modules/**/*.map'\n    - '!**/node_modules/**/*.ts'\n    - '!**/node_modules/**/*.tsx'\n    - '!**/node_modules/**/*.jsx'\n    - '!**/node_modules/**/*.js.map'\n    - '!**/node_modules/**/*.d.ts'\n    - '!**/node_modules/**/*.min.js'\n    - '!**/node_modules/**/*.min.css'\n    - '!**/node_modules/**/*.min.js.map'\n    - '!**/node_modules/**/*.min.css.map'\n    - '!**/node_modules/**/*.bundle.js'\n    - '!**/node_modules/**/*.bundle.css'\n    - '!**/node_modules/**/*.bundle.js.map'\n    - '!**/node_modules/**/*.bundle.css.map'\n    - '!**/node_modules/**/*.umd.js'\n    - '!**/node_modules/**/*.umd.css'\n    - '!**/node_modules/**/*.umd.js.map'\n    - '!**/node_modules/**/*.umd.css.map'\n    - '!**/node_modules/**/*.esm.js'\n    - '!**/node_modules/**/*.esm.css'\n    - '!**/node_modules/**/*.esm.js.map'\n    - '!**/node_modules/**/*.esm.css.map'\n    - '!**/node_modules/**/*.cjs.js'\n    - '!**/node_modules/**/*.cjs.css'\n    - '!**/node_modules/**/*.cjs.js.map'\n    - '!**/node_modules/**/*.cjs.css.map'\n    - '!**/node_modules/**/*.mjs.map'\n    - '!**/node_modules/**/*.css'\n    - '!**/node_modules/**/*.scss'\n    - '!**/node_modules/**/*.sass'\n    - '!**/node_modules/**/*.less'\n    - '!**/node_modules/**/*.styl'\n    - '!**/node_modules/**/*.stylus'\n    - '!**/node_modules/**/*.svg'\n    - '!**/node_modules/**/*.png'\n    - '!**/node_modules/**/*.jpg'\n    - '!**/node_modules/**/*.jpeg'\n    - '!**/node_modules/**/*.gif'\n    - '!**/node_modules/**/*.ico'\n    - '!**/node_modules/**/*.woff'\n    - '!**/node_modules/**/*.woff2'\n    - '!**/node_modules/**/*.ttf'\n    - '!**/node_modules/**/*.eot'\n    - '!**/node_modules/**/*.otf'\n    - '!**/node_modules/**/*.mp4'\n    - '!**/node_modules/**/*.webm'\n    - '!**/node_modules/**/*.ogg'\n    - '!**/node_modules/**/*.mp3'\n    - '!**/node_modules/**/*.wav'\n    - '!**/node_modules/**/*.flac'\n    - '!**/node_modules/**/*.m4a'\n    - '!**/node_modules/**/*.aac'\n    - '!**/node_modules/**/*.wma'\n    - '!**/node_modules/**/*.wmv'\n    - '!**/node_modules/**/*.avi'\n    - '!**/node_modules/**/*.mov'\n    - '!**/node_modules/**/*.flv'\n    - '!**/node_modules/**/*.mkv'\n    - '!**/node_modules/**/*.webp'\n    - '!**/node_modules/**/*.bmp'\n    - '!**/node_modules/**/*.tiff'\n    - '!**/node_modules/**/*.ico'\n    - '!**/node_modules/**/*.cur'\n    - '!**/node_modules/**/*.ani'\n    - '!**/node_modules/**/*.pdf'\n    - '!**/node_modules/**/*.doc'\n    - '!**/node_modules/**/*.docx'\n    - '!**/node_modules/**/*.xls'\n    - '!**/node_modules/**/*.xlsx'\n    - '!**/node_modules/**/*.ppt'\n    - '!**/node_modules/**/*.pptx'\n    - '!**/node_modules/**/*.odt'\n    - '!**/node_modules/**/*.ods'\n    - '!**/node_modules/**/*.odp'\n    - '!**/node_modules/**/*.rtf'\n    - '!**/node_modules/**/*.txt'\n    - '!**/node_modules/**/*.csv'\n    - '!**/node_modules/**/*.xml'\n    - '!**/node_modules/**/*.yaml'\n    - '!**/node_modules/**/*.yml'\n    - '!**/node_modules/**/*.json'\n    - '!**/node_modules/**/*.json5'\n    - '!**/node_modules/**/*.toml'\n    - '!**/node_modules/**/*.ini'\n    - '!**/node_modules/**/*.conf'\n    - '!**/node_modules/**/*.config'\n    - '!**/node_modules/**/*.properties'\n    - '!**/node_modules/**/*.env'\n    - '!**/node_modules/**/*.env.*'\n    - '!**/node_modules/**/*.local'\n    - '!**/node_modules/**/*.local.*'\n    - '!**/node_modules/**/*.development'\n    - '!**/node_modules/**/*.development.*'\n    - '!**/node_modules/**/*.test'\n    - '!**/node_modules/**/*.test.*'\n    - '!**/node_modules/**/*.staging'\n    - '!**/node_modules/**/*.staging.*'\n    - '!**/node_modules/**/*.production'\n    - '!**/node_modules/**/*.production.*'\n    - '!**/node_modules/**/*.debug'\n    - '!**/node_modules/**/*.debug.*'\n    - '!**/node_modules/**/*.release'\n    - '!**/node_modules/**/*.release.*'\n    - '!**/node_modules/**/*.min'\n    - '!**/node_modules/**/*.min.*'\n    - '!**/node_modules/**/*.bundle'\n",
+    "serviceRawFile": "service: advenrent-api\n\nplugins:\n  - serverless-offline\n  - serverless-dotenv-plugin\n\ncustom:\n  serverless-offline:\n    httpPort: 5000\n    lambdaPort: 3002\n  dotenv:\n    path: .env.dev\n    logging: true\n    debug: true\n    include:\n      - DB_HOST\n      - DB_PORT\n      - DB_NAME\n      - DB_USER\n      - DB_PASSWORD\n      - JWT_SECRET\n      - STRIPE_SECRET_KEY\n      - STRIPE_WEBHOOK_SECRET\n      - CORS_ORIGIN\n    exclude:\n      - NODE_ENV\n      - PORT\n      - TEST_ENV_CONFIRMATION\n\nprovider:\n  name: aws\n  runtime: nodejs22.x\n  stage: ${opt:stage, 'dev'}\n  region: us-east-1\n  environment:\n    DB_HOST: ${env:DB_HOST, 'advenrent-instance-1.cabwqitbdsrq.us-east-1.rds.amazonaws.com'}\n    DB_PORT: ${env:DB_PORT, '5432'}\n    DB_NAME: ${env:DB_NAME, 'powersports'}\n    DB_USER: ${env:DB_USER, 'postgres'}\n    DB_PASSWORD: ${env:DB_PASSWORD, 'Rent2017%24'}\n    JWT_SECRET: ${env:JWT_SECRET, 'jwt_dev_secret'}\n    STRIPE_SECRET_KEY: ${env:STRIPE_SECRET_KEY, 'sk_test_stripekey'}\n    STRIPE_WEBHOOK_SECRET: ${env:STRIPE_WEBHOOK_SECRET, 'whsec_dev_webhook'}\n    CORS_ORIGIN: ${env:CORS_ORIGIN, 'http://localhost:8081'}\n\nfunctions:\n  api:\n    handler: handler.handler\n    events:\n      - http:\n          path: /{proxy+}\n          method: any\n          cors: true\n\npackage:\n  individually: true\n  patterns:\n    # Include only .mjs backend files\n    - 'server/**/*.mjs'\n    - 'server/config/**/*.mjs'\n    - 'server/routes/**/*.mjs'\n    - 'server/db/**/*.mjs'\n    - 'server/middleware/**/*.mjs'\n    - 'handler.mjs'\n    \n    # Include only essential config files\n    - 'package.json'\n    - '.env.dev'\n    \n    # Include only the necessary node_modules\n    - 'node_modules/pg/**'\n    - 'node_modules/express/**'\n    - 'node_modules/cors/**'\n    - 'node_modules/dotenv/**'\n    - 'node_modules/jsonwebtoken/**'\n    - 'node_modules/bcryptjs/**'\n    - 'node_modules/stripe/**'\n    - 'node_modules/serverless-http/**'\n    - 'node_modules/serverless-dotenv-plugin/**'\n    - 'node_modules/serverless-offline/**'\n    \n    # Exclude all frontend files\n    - '!app/**'\n    - '!assets/**'\n    - '!components/**'\n    - '!constants/**'\n    - '!hooks/**'\n    - '!utils/**'\n    - '!App.tsx'\n    - '!app.json'\n    - '!babel.config.js'\n    - '!tsconfig.json'\n    - '!metro.config.js'\n    - '!README.md'\n    - '!app.d.ts'\n\n    \n    # Exclude unnecessary node_modules\n    - '!**/node_modules/**/*.txt'\n    - '!**/node_modules/**/*.d.ts'\n    - '!**/node_modules/**/test/**'\n    - '!**/node_modules/**/tests/**'\n    - '!**/node_modules/**/__tests__/**'\n    - '!**/node_modules/**/coverage/**'\n    - '!**/node_modules/**/.git/**'\n    - '!**/node_modules/**/.github/**'\n    - '!**/node_modules/**/.vscode/**'\n    - '!**/node_modules/**/.idea/**'\n    - '!**/node_modules/**/docs/**'\n    - '!**/node_modules/**/examples/**'\n    - '!**/node_modules/**/benchmark/**'\n    - '!**/node_modules/**/scripts/**'\n    - '!**/node_modules/**/bin/**'\n    - '!**/node_modules/**/dist/**'\n    - '!**/node_modules/**/build/**'\n    - '!**/node_modules/**/lib/**'\n    - '!**/node_modules/**/src/**'\n    - '!**/node_modules/**/types/**'\n    - '!**/node_modules/**/typings/**'\n    - '!**/node_modules/**/flow-typed/**'\n    - '!**/node_modules/**/flow/**'\n    - '!**/node_modules/**/ts/**'\n    - '!**/node_modules/**/tsconfig.json'\n    - '!**/node_modules/**/tsconfig.*.json'\n    - '!**/node_modules/**/yarn.lock'\n    - '!**/node_modules/**/pnpm-lock.yaml'\n    - '!**/node_modules/**/CHANGELOG.md'\n    - '!**/node_modules/**/LICENSE'\n    - '!**/node_modules/**/LICENSE.md'\n    - '!**/node_modules/**/README.md'\n    - '!**/node_modules/**/README'\n    - '!**/node_modules/**/AUTHORS'\n    - '!**/node_modules/**/CONTRIBUTORS'\n    - '!**/node_modules/**/HISTORY.md'\n    - '!**/node_modules/**/NOTICE'\n    - '!**/node_modules/**/SECURITY.md'\n    - '!**/node_modules/**/SUPPORT.md'\n    - '!**/node_modules/**/CODE_OF_CONDUCT.md'\n    - '!**/node_modules/**/CONTRIBUTING.md'\n    - '!**/node_modules/**/ISSUE_TEMPLATE/**'\n    - '!**/node_modules/**/PULL_REQUEST_TEMPLATE.md'\n    - '!**/node_modules/**/.editorconfig'\n    - '!**/node_modules/**/.eslintrc*'\n    - '!**/node_modules/**/.prettierrc*'\n    - '!**/node_modules/**/.stylelintrc*'\n    - '!**/node_modules/**/.babelrc*'\n    - '!**/node_modules/**/.npmrc'\n    - '!**/node_modules/**/.yarnrc'\n    - '!**/node_modules/**/.gitignore'\n    - '!**/node_modules/**/.gitattributes'\n    - '!**/node_modules/**/.travis.yml'\n    - '!**/node_modules/**/.circleci/**'\n    - '!**/node_modules/**/.github/**'\n    - '!**/node_modules/**/.vscode/**'\n    - '!**/node_modules/**/.idea/**'\n    - '!**/node_modules/**/.DS_Store'\n    - '!**/node_modules/**/Thumbs.db'\n    - '!**/node_modules/**/*.log'\n    - '!**/node_modules/**/*.lock'\n    - '!**/node_modules/**/*.map'\n    - '!**/node_modules/**/*.ts'\n    - '!**/node_modules/**/*.tsx'\n    - '!**/node_modules/**/*.jsx'\n    - '!**/node_modules/**/*.js.map'\n    - '!**/node_modules/**/*.d.ts'\n    - '!**/node_modules/**/*.min.js'\n    - '!**/node_modules/**/*.min.css'\n    - '!**/node_modules/**/*.min.js.map'\n    - '!**/node_modules/**/*.min.css.map'\n    - '!**/node_modules/**/*.bundle.js'\n    - '!**/node_modules/**/*.bundle.css'\n    - '!**/node_modules/**/*.bundle.js.map'\n    - '!**/node_modules/**/*.bundle.css.map'\n    - '!**/node_modules/**/*.umd.js'\n    - '!**/node_modules/**/*.umd.css'\n    - '!**/node_modules/**/*.umd.js.map'\n    - '!**/node_modules/**/*.umd.css.map'\n    - '!**/node_modules/**/*.esm.js'\n    - '!**/node_modules/**/*.esm.css'\n    - '!**/node_modules/**/*.esm.js.map'\n    - '!**/node_modules/**/*.esm.css.map'\n    - '!**/node_modules/**/*.cjs.js'\n    - '!**/node_modules/**/*.cjs.css'\n    - '!**/node_modules/**/*.cjs.js.map'\n    - '!**/node_modules/**/*.cjs.css.map'\n    - '!**/node_modules/**/*.mjs.map'\n    - '!**/node_modules/**/*.css'\n    - '!**/node_modules/**/*.scss'\n    - '!**/node_modules/**/*.sass'\n    - '!**/node_modules/**/*.less'\n    - '!**/node_modules/**/*.styl'\n    - '!**/node_modules/**/*.stylus'\n    - '!**/node_modules/**/*.svg'\n    - '!**/node_modules/**/*.png'\n    - '!**/node_modules/**/*.jpg'\n    - '!**/node_modules/**/*.jpeg'\n    - '!**/node_modules/**/*.gif'\n    - '!**/node_modules/**/*.ico'\n    - '!**/node_modules/**/*.woff'\n    - '!**/node_modules/**/*.woff2'\n    - '!**/node_modules/**/*.ttf'\n    - '!**/node_modules/**/*.eot'\n    - '!**/node_modules/**/*.otf'\n    - '!**/node_modules/**/*.mp4'\n    - '!**/node_modules/**/*.webm'\n    - '!**/node_modules/**/*.ogg'\n    - '!**/node_modules/**/*.mp3'\n    - '!**/node_modules/**/*.wav'\n    - '!**/node_modules/**/*.flac'\n    - '!**/node_modules/**/*.m4a'\n    - '!**/node_modules/**/*.aac'\n    - '!**/node_modules/**/*.wma'\n    - '!**/node_modules/**/*.wmv'\n    - '!**/node_modules/**/*.avi'\n    - '!**/node_modules/**/*.mov'\n    - '!**/node_modules/**/*.flv'\n    - '!**/node_modules/**/*.mkv'\n    - '!**/node_modules/**/*.webp'\n    - '!**/node_modules/**/*.bmp'\n    - '!**/node_modules/**/*.tiff'\n    - '!**/node_modules/**/*.ico'\n    - '!**/node_modules/**/*.cur'\n    - '!**/node_modules/**/*.ani'\n    - '!**/node_modules/**/*.pdf'\n    - '!**/node_modules/**/*.doc'\n    - '!**/node_modules/**/*.docx'\n    - '!**/node_modules/**/*.xls'\n    - '!**/node_modules/**/*.xlsx'\n    - '!**/node_modules/**/*.ppt'\n    - '!**/node_modules/**/*.pptx'\n    - '!**/node_modules/**/*.odt'\n    - '!**/node_modules/**/*.ods'\n    - '!**/node_modules/**/*.odp'\n    - '!**/node_modules/**/*.rtf'\n    - '!**/node_modules/**/*.txt'\n    - '!**/node_modules/**/*.csv'\n    - '!**/node_modules/**/*.xml'\n    - '!**/node_modules/**/*.yaml'\n    - '!**/node_modules/**/*.yml'\n    - '!**/node_modules/**/*.json'\n    - '!**/node_modules/**/*.json5'\n    - '!**/node_modules/**/*.toml'\n    - '!**/node_modules/**/*.ini'\n    - '!**/node_modules/**/*.conf'\n    - '!**/node_modules/**/*.config'\n    - '!**/node_modules/**/*.properties'\n    - '!**/node_modules/**/*.env'\n    - '!**/node_modules/**/*.env.*'\n    - '!**/node_modules/**/*.local'\n    - '!**/node_modules/**/*.local.*'\n    - '!**/node_modules/**/*.development'\n    - '!**/node_modules/**/*.development.*'\n    - '!**/node_modules/**/*.test'\n    - '!**/node_modules/**/*.test.*'\n    - '!**/node_modules/**/*.staging'\n    - '!**/node_modules/**/*.staging.*'\n    - '!**/node_modules/**/*.production'\n    - '!**/node_modules/**/*.production.*'\n    - '!**/node_modules/**/*.debug'\n    - '!**/node_modules/**/*.debug.*'\n    - '!**/node_modules/**/*.release'\n    - '!**/node_modules/**/*.release.*'\n    - '!**/node_modules/**/*.min'\n    - '!**/node_modules/**/*.min.*'\n    - '!**/node_modules/**/*.bundle'\n",
     "command": [
       "package"
     ],
@@ -1535,7 +1533,7 @@
               "S3Bucket": {
                 "Ref": "ServerlessDeploymentBucket"
               },
-              "S3Key": "serverless/advenrent-api/dev/1743364978726-2025-03-30T20:02:58.726Z/api.zip"
+              "S3Key": "serverless/advenrent-api/dev/1743366107478-2025-03-30T20:21:47.478Z/api.zip"
             },
             "Handler": "handler.handler",
             "Runtime": "nodejs22.x",
@@ -1566,14 +1564,14 @@
             "ApiLogGroup"
           ]
         },
-        "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w": {
+        "ApiLambdaVersionalySEMz370pps2Qcd1SjpK2pQD4udYbKN2qprqVfw": {
           "Type": "AWS::Lambda::Version",
           "DeletionPolicy": "Retain",
           "Properties": {
             "FunctionName": {
               "Ref": "ApiLambdaFunction"
             },
-            "CodeSha256": "qgts3ci233SpMiqaTHG+RrA0FobZ+s7/oERfpG+YkZE="
+            "CodeSha256": "/SQTTi4RhRjsgeGjCLJy7FndECEmXfaj+RVK7H8lJyM="
           }
         },
         "ApiGatewayRestApi": {
@@ -1694,7 +1692,7 @@
             "ApiLambdaPermissionApiGateway"
           ]
         },
-        "ApiGatewayDeployment1743364919978": {
+        "ApiGatewayDeployment1743366071812": {
           "Type": "AWS::ApiGateway::Deployment",
           "Properties": {
             "RestApiId": {
@@ -1757,7 +1755,7 @@
         "ApiLambdaFunctionQualifiedArn": {
           "Description": "Current Lambda function version",
           "Value": {
-            "Ref": "ApiLambdaVersionw086LkqxEpgd5fz79PLPnkPTJJpwcdVJn4riKi37w"
+            "Ref": "ApiLambdaVersionalySEMz370pps2Qcd1SjpK2pQD4udYbKN2qprqVfw"
           },
           "Export": {
             "Name": "sls-advenrent-api-dev-ApiLambdaFunctionQualifiedArn"

@@ -93,12 +93,9 @@ package:
     - '!metro.config.js'
     - '!README.md'
     - '!app.d.ts'
-    
-    # Exclude all .js files
-    - '!**/*.js'
+
     
     # Exclude unnecessary node_modules
-    - '!**/node_modules/**/*.md'
     - '!**/node_modules/**/*.txt'
     - '!**/node_modules/**/*.d.ts'
     - '!**/node_modules/**/test/**'
