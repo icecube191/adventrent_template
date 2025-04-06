@@ -1,0 +1,100 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "2025-03-26T17:27:57Z",
+    "title" : "dev-advenrent-api"
+  },
+  "host" : "bggf225g95.execute-api.us-east-1.amazonaws.com",
+  "basePath" : "/dev",
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/" : {
+      "get" : {
+        "responses" : { }
+      }
+    },
+    "/api/auth/login" : {
+      "post" : {
+        "responses" : { }
+      }
+    },
+    "/api/auth/me" : {
+      "get" : {
+        "responses" : { }
+      }
+    },
+    "/api/auth/register" : {
+      "post" : {
+        "responses" : { }
+      }
+    },
+    "/api/logs/error" : {
+      "post" : {
+        "responses" : { }
+      }
+    },
+    "/api/payments/create-payment-intent" : {
+      "post" : {
+        "responses" : { }
+      }
+    },
+    "/api/users/profile" : {
+      "put" : {
+        "responses" : { }
+      }
+    },
+    "/api/users/role" : {
+      "put" : {
+        "responses" : { }
+      }
+    },
+    "/api/vehicles" : {
+      "post" : {
+        "responses" : { }
+      }
+    },
+    "/api/vehicles/{id}/images" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : { }
+      }
+    },
+    "/get-users" : {
+      "get" : {
+        "responses" : { }
+      }
+    },
+    "/users" : {
+      "get" : {
+        "responses" : { }
+      }
+    },
+    "/vehicle-images/{id}" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : { }
+      }
+    },
+    "/vehicles/{id}/upload-image" : {
+      "post" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : { }
+      }
+    }
+  }
+}
